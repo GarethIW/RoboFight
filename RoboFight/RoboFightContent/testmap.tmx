@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="50" tilewidth="60" tileheight="60">
+ <tileset firstgid="1" name="tiles" tilewidth="60" tileheight="60">
+  <image source="tiles.png" width="1200" height="1200"/>
+ </tileset>
+ <tileset firstgid="401" name="tiles-glow" tilewidth="60" tileheight="60">
+  <image source="tiles-glow.png" width="1200" height="1200"/>
+ </tileset>
+ <layer name="Glow0" width="50" height="50" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3T0QqDMAwFUNn/f+G+xqeBSM1uqpsbnAN5kJQ2aeOyAAAAAAAAAACJ56Mfv2hb277Wf+3j9b3P3RWzNYz6Oztvo3tK7mqUT2vr9nG0tvP2M32k53b77/wz6bwkfWz3q/obvVFSZzVH1VnpDFXnXnHXR/u/y6fzMbvubHTqrfb4VH3fjhUTPKSMECcAAA==
+  </data>
+ </layer>
+ <layer name="Tile1" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3DAQkAMAwDsE7B/Ws59zYXZ4wEkgAAAAAAAAAAp3a8cdKn6tcNpRl+8xAnAAA=
+  </data>
+ </layer>
+ <objectgroup name="Triggers1" width="50" height="50">
+  <object x="282" y="2362" width="48" height="246"/>
+  <object x="812" y="2376" width="34" height="250"/>
+  <object x="1142" y="2364" width="52" height="258"/>
+  <object x="1490" y="2370" width="70" height="232"/>
+  <object x="1922" y="2358" width="72" height="264"/>
+  <object x="2360" y="2368" width="62" height="252"/>
+ </objectgroup>
+ <objectgroup name="Walkable1" width="50" height="50">
+  <object x="0" y="2400">
+   <polygon points="0,0 2999,1 2999,182 0,181"/>
+  </object>
+ </objectgroup>
+ <layer name="Tile0" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2UMW4CMRBFvUeJlDKkIRTpskkDPaSJOABpyAVIk7sQ5QpBewQ4E4Pklcxgz4ztLGn+k76Ed3c8/493cQ4AAAAAAAAAAAAAAAAAAABck+4f+9b0Dutr96olp3/suY5paKQelv6Sz2tk0GZl9XBHGpG+M/Ui9LViOXPr9SfSK+mgaMd028SzpDyVzuukB9Ik0WPsn2lJz6QfRW0iC++RymKdV0xvpBlpG8n4G/hp3eUZcy0SWaa+hxPmee9zvJNumnytqW7JPJdqlfCx9te3Qu3p3Oasfsf24utQX3RvX3iWXBvSZyLHh5+VVP/YnNf3GfnvHEk12vvFFc6qxEdpBl7P9+nXvU++5grvx2Y9ZA4pT04GLUfKozbDGu+xLFoGaw7+HUh+tRrrDDp3mSc3h+X9/YtZW+el5bF6LMlS+51ofqVzGcpfiXL/d0MdAYs/t4kQJwAA
+  </data>
+ </layer>
+ <objectgroup name="Triggers0" width="50" height="50">
+  <object x="545" y="2273" width="76" height="152"/>
+  <object x="844" y="2268" width="66" height="150"/>
+  <object x="1226" y="2258" width="74" height="158"/>
+  <object x="1584" y="2326" width="58" height="202"/>
+  <object x="1904" y="2128" width="66" height="414"/>
+  <object x="2182" y="2136" width="82" height="406"/>
+  <object x="2466" y="2142" width="68" height="398"/>
+ </objectgroup>
+ <objectgroup name="Walkable0" width="50" height="50">
+  <object x="0" y="2400">
+   <polygon points="0,0 0,178 538,178 356,0"/>
+  </object>
+  <object x="420" y="2276">
+   <polygon points="0,0 1018,0 900,124 120,120"/>
+  </object>
+  <object x="1322" y="2518">
+   <polygon points="0,0 180,-180 418,-180 482,-238 539,-238 662,-120 1140,-114 1256,0"/>
+  </object>
+  <object x="1863" y="2161">
+   <polygon points="0,0 835,-3 964,119 1074,120 955,239 719,239 596,117 117,119"/>
+  </object>
+  <object x="2822" y="2578">
+   <polygon points="0,0 178,-176 178,2"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Spawn" width="50" height="50">
+  <object x="56" y="2416" width="118" height="108"/>
+ </objectgroup>
+</map>
