@@ -218,7 +218,7 @@ namespace RoboFight
 
             
 
-            if (jumping || falling && Speed.X>-0.1f && Speed.X<0.1f)
+            if ((jumping || falling))
             {
                 float originalLandingHeight = landingHeight;
                 bool found = false;
@@ -275,121 +275,7 @@ namespace RoboFight
                 }
             }
 
-            //collisionRect.Offset(new Point((int)Speed.X, (int)Speed.Y));
-
-            //Rectangle? collRect;
-
-            //// Check for ledge grabs
-            //if ((jumping || falling) && !justUngrabbed)
-            //{
-            //    if (Speed.X < 0 && gameMap.CheckTileCollision(new Vector2(collisionRect.Left, collisionRect.Top), Layer))
-            //        if (!gameMap.CheckTileCollision(new Vector2(collisionRect.Left, collisionRect.Top - gameMap.TileHeight), Layer) &&
-            //           !gameMap.CheckTileCollision(new Vector2(collisionRect.Left + gameMap.TileWidth, collisionRect.Top - gameMap.TileHeight), Layer) &&
-            //           !gameMap.CheckTileCollision(new Vector2(collisionRect.Left + gameMap.TileWidth, collisionRect.Top), Layer))
-            //        {
-            //            grabbed = true;
-            //            jumping = false;
-            //            falling = false;
-            //            crouching = false;
-            //            Speed.Y = 0;
-            //            Speed.X = 0;
-            //            grabbedPosition = new Vector2((int)(collisionRect.Left / gameMap.TileWidth) * gameMap.TileWidth, (int)(collisionRect.Top / gameMap.TileHeight) * gameMap.TileHeight) + new Vector2(gameMap.TileWidth, collisionRect.Height + 30);
-            //            faceDir = -1;
-            //        }
-
-            //    if (Speed.X > 0 && gameMap.CheckTileCollision(new Vector2(collisionRect.Right, collisionRect.Top), Layer))
-            //        if (!gameMap.CheckTileCollision(new Vector2(collisionRect.Right, collisionRect.Top - gameMap.TileHeight), Layer) &&
-            //           !gameMap.CheckTileCollision(new Vector2(collisionRect.Right - gameMap.TileWidth, collisionRect.Top - gameMap.TileHeight), Layer) &&
-            //           !gameMap.CheckTileCollision(new Vector2(collisionRect.Right - gameMap.TileWidth, collisionRect.Top), Layer))
-            //        {
-            //            grabbed = true;
-            //            jumping = false;
-            //            falling = false;
-            //            crouching = false;
-            //            Speed.Y = 0;
-            //            Speed.X = 0;
-            //            grabbedPosition = new Vector2((int)(collisionRect.Right / gameMap.TileWidth) * gameMap.TileWidth, (int)(collisionRect.Top / gameMap.TileHeight) * gameMap.TileHeight) + new Vector2(0, collisionRect.Height + 30);
-            //            faceDir = 1;
-            //        }
-            //}
-
-            //if (grabbed || climbing) return;
-
-
-
-            //collRect = CheckCollisionBottom(gameMap);
-            //if (collRect.HasValue)
-            //{
-            //    if (falling)
-            //    {
-            //        Speed.Y = 0f;
-            //        Position.Y -= collRect.Value.Height;
-            //        collisionRect.Offset(0, -collRect.Value.Height);
-            //        jumping = false;
-            //        falling = false;
-            //        justUngrabbed = false;
-            //        Tile t = gameMap.GetTile(Position + new Vector2(0, 30), Layer);
-            //        if (t != null)
-            //        {
-            //            if (t.Properties.Contains("Wood"))
-            //                AudioController.PlaySFX("fstep-wood", -0.2f, 0.2f);
-            //            else if (t.Properties.Contains("Metal"))
-            //                AudioController.PlaySFX("fstep-metal", -0.2f, 0.2f);
-            //            else AudioController.PlaySFX("fstep-grass", -0.2f, 0.2f);
-            //        }
-            //        else AudioController.PlaySFX("fstep-grass", -0.2f, 0.2f);
-            //    }
-
-            //}
-            //else
-            //    falling = true;
-
-            //if (Speed.Y < 0f)
-            //{
-            //    collRect = CheckCollisionTop(gameMap);
-            //    if (collRect.HasValue)
-            //    {
-            //        Speed.Y = 0f;
-            //        Position.Y += collRect.Value.Height;
-            //        collisionRect.Offset(justUngrabbed ? (collRect.Value.Width * (-faceDir)) : 0, collRect.Value.Height);
-            //        falling = true;
-            //        jumping = false;
-            //    }
-            //}
-
-
-
-
-            //if (Speed.X > 0f)
-            //{
-            //    collRect = CheckCollisionRight(gameMap);
-            //    if (collRect.HasValue)
-            //    {
-            //        Speed.X = 0f;
-            //        Position.X -= (collRect.Value.Width);
-            //        collisionRect.Offset(-collRect.Value.Width, 0);
-            //    }
-            //}
-            //if (Speed.X < 0f)
-            //{
-            //    collRect = CheckCollisionLeft(gameMap);
-            //    if (collRect.HasValue)
-            //    {
-            //        Speed.X = 0f;
-            //        Position.X += collRect.Value.Width;
-            //        collisionRect.Offset(collRect.Value.Width, 0);
-            //    }
-            //}
-
-
-            //bool collided = false;
-            //for (int y = -1; y > -15; y--)
-            //{
-            //    collisionRect.Offset(0, -1);
-            //    collRect = CheckCollisionTop(gameMap);
-            //    if (collRect.HasValue) collided = true;
-            //}
-            //if (!collided) crouching = false;
+           
 
         }
 
@@ -405,7 +291,7 @@ namespace RoboFight
 
                     foreach (MapObject o in walkableLayer.Objects)
                     {
-                        if (Helper.IsPointInShape(new Vector2(Position.X-((gameMap.Width * gameMap.TileWidth) * i), y), o.LinePoints))
+                        if (Helper.IsPointInShape(new Vector2((Position.X + (Speed.X * 10))-((gameMap.Width * gameMap.TileWidth) * i), y), o.LinePoints))
                         {
                             if ((y - landingHeight) > gameMap.TileHeight)
                             {
