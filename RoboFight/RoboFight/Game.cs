@@ -24,7 +24,8 @@ namespace RoboFight
 
         Map gameMap;
         Camera gameCamera;
-        Hero gameHero;
+        Robot gameHero;
+        EnemyManager enemyManager = new EnemyManager();
 
         Texture2D skyTex;
 
@@ -32,6 +33,10 @@ namespace RoboFight
 
         List<int> levelSectors = new List<int>();
         List<Rectangle> triggerRects = new List<Rectangle>();
+
+        Dictionary<int, MapObjectLayer> WalkableLayers = new Dictionary<int, MapObjectLayer>();
+
+        bool inTrigger = false;
 
         public Game()
         {
@@ -67,12 +72,19 @@ namespace RoboFight
 
             gameMap = Content.Load<Map>("testmap");
 
-            gameHero = new Hero(Helper.PtoV((gameMap.GetLayer("Spawn") as MapObjectLayer).Objects[0].Location.Center));
+            gameHero = new Robot(Helper.PtoV((gameMap.GetLayer("Spawn") as MapObjectLayer).Objects[0].Location.Center), true);
             gameHero.LoadContent(Content, GraphicsDevice);
 
             gameCamera = new Camera(GraphicsDevice.Viewport, gameMap);
             gameCamera.Position = gameHero.Position;
             gameCamera.Target = gameHero.Position;
+
+            enemyManager.LoadContent(Content, GraphicsDevice);
+
+            for (int i = 0; i < NUM_SECTORS; i++)
+            {
+                WalkableLayers.Add(i, gameMap.GetLayer("Walkable" + i) as MapObjectLayer);
+            }
 
             skyTex = Content.Load<Texture2D>("sky");
 
@@ -111,32 +123,23 @@ namespace RoboFight
 
                 if (ks.IsKeyDown(Keys.Space)) gameHero.Jump();
 
-                //if (ks.IsKeyDown(Keys.F10) && !lks.IsKeyDown(Keys.F10))
-                //{
+                gameHero.Attack((ks.IsKeyDown(Keys.Z) || ks.IsKeyDown(Keys.Enter)));
 
-                //    graphics.ToggleFullScreen();
-                //    if (graphics.IsFullScreen)
-                //    {
-                //        graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-                //        graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-                //    }
-                //    else
-                //    {
-                //        graphics.PreferredBackBufferWidth = 1280;
-                //        graphics.PreferredBackBufferHeight = 720;
-                //    }
-                //    graphics.ApplyChanges();
-                //}
-
-                gameHero.Update(gameTime, gameCamera, gameMap, levelSectors);
+                gameHero.Update(gameTime, gameCamera, gameMap, levelSectors, WalkableLayers, gameHero);
 
                 gameCamera.Target = gameHero.Position;
                 gameCamera.Update(GraphicsDevice.Viewport.Bounds);
 
                 gameCamera.ClampRect.Width = (gameMap.Width * gameMap.TileWidth) * levelSectors.Count();
 
+                gameHero.Position = Vector2.Clamp(gameHero.Position, gameCamera.Position - (new Vector2(gameCamera.Width, gameCamera.Height) / 2), gameCamera.Position + (new Vector2(gameCamera.Width, gameCamera.Height) / 2));
+
+                enemyManager.Update(gameTime, gameCamera, gameMap, levelSectors, WalkableLayers, gameHero);
+
                 if (levelSectors.Count - gameHero.Sector < 2)
                     GenerateSector();
+
+                CheckTriggers();
             }
 
             base.Update(gameTime);
@@ -163,11 +166,12 @@ namespace RoboFight
                 x++;
             }
 
-            
-
             spriteBatch.End();
 
+            enemyManager.Draw(GraphicsDevice, spriteBatch, gameCamera, 0f, gameHero.Position.Y);
             gameHero.Draw(GraphicsDevice, spriteBatch, gameCamera);
+            enemyManager.Draw(GraphicsDevice, spriteBatch, gameCamera, gameHero.Position.Y, gameCamera.ClampRect.Height);
+
 
             base.Draw(gameTime);
         }
@@ -198,8 +202,30 @@ namespace RoboFight
                         }
                 }
 
-                triggerRects.Add(trig);
+                //if(trig.X>(gameCamera.Width - (gameCamera.Width/3)))
+                    triggerRects.Add(trig);
             }
+        }
+
+        void CheckTriggers()
+        {
+            Rectangle? trig = null;
+            foreach (Rectangle r in triggerRects)
+            {
+                if (r.Contains(Helper.VtoP(gameHero.Position)))
+                {
+                    trig = r;
+
+                    if (enemyManager.Spawn(gameMap, gameCamera, levelSectors) > 0)
+                    {
+                        inTrigger = true;
+                        //gameCamera.Holding = true;
+                    }
+                }
+            }
+
+            if(trig.HasValue)
+                triggerRects.Remove(trig.Value);
         }
     }
 }

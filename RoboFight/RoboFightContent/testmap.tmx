@@ -13,7 +13,7 @@
  </layer>
  <layer name="Tile1" width="50" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3DAQkAMAwDsE7B/Ws59zYXZ4wEkgAAAAAAAAAAp3a8cdKn6tcNpRl+8xAnAAA=
+   H4sIAAAAAAAAC+3DQQ0AIBADsKEA/1oIGrCEi3ssbdIEAAAAAAAAANir40nHV/KqOvoDoUj0lhAnAAA=
   </data>
  </layer>
  <objectgroup name="Triggers1" width="50" height="50">
