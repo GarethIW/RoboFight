@@ -50,12 +50,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="robo\robo.png">
+    <Compile Include="robo\robo.png">
       <Name>robo</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+      <ProcessorParameters_PremultiplyAlpha>False</ProcessorParameters_PremultiplyAlpha>
+    </Compile>
     <Compile Include="sky.png">
       <Name>sky</Name>
       <Importer>TextureImporter</Importer>

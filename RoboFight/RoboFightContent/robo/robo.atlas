@@ -11,14 +11,14 @@ _0000_Head
   index: -1
 _0004_Foot-Right
   rotate: false
-  xy: 55, 93
+  xy: 55, 115
   size: 27, 11
   orig: 27, 11
   offset: 0, 0
   index: -1
 _0005_Foot-Left
   rotate: false
-  xy: 55, 93
+  xy: 55, 115
   size: 27, 11
   orig: 27, 11
   offset: 0, 0
@@ -46,7 +46,7 @@ _0003_Torso
   index: -1
 _0001_Arm-Lower
   rotate: false
-  xy: 71, 63
+  xy: 55, 85
   size: 47, 28
   orig: 47, 28
   offset: 0, 0
@@ -57,4 +57,11 @@ _0002_Arm-Upper
   size: 29, 48
   orig: 29, 48
   offset: 0, 0
+  index: -1
+crowbar
+  rotate: false
+  xy: 71, 63
+  size: 50, 20
+  orig: 60, 26
+  offset: 3, 2
   index: -1

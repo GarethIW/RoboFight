@@ -21,7 +21,7 @@ namespace TiledLib
 
         public Matrix CameraMatrix;
 
-        float Speed = 0.2f;
+        float Speed = 0.1f;
 
         /// <summary>
         /// Initialise the camera, using the game map to define the boundaries

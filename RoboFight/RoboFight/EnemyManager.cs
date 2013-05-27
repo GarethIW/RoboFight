@@ -15,17 +15,23 @@ namespace RoboFight
     {
         public List<Robot> Enemies = new List<Robot>();
 
+        public static EnemyManager Instance;
+
         Texture2D blankTex;
 
         SkeletonRenderer skeletonRenderer;
 
-        Dictionary<string, Atlas> AtlasDict = new Dictionary<string, Atlas>();
+        public Dictionary<string, Atlas> AtlasDict = new Dictionary<string, Atlas>();
         Dictionary<string, string> JsonDict = new Dictionary<string, string>();
 
         static Random rand = new Random();
 
+        int largestNumberSpawned = 0;
+
         public EnemyManager()
-        { }
+        {
+            Instance = this;
+        }
 
         public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
         {
@@ -33,7 +39,7 @@ namespace RoboFight
 
             skeletonRenderer = new SkeletonRenderer(graphicsDevice);
 
-            AtlasDict.Add("robo", new Atlas(graphicsDevice, Path.Combine(content.RootDirectory, "robo/robo.atlas")));
+            AtlasDict.Add("robo", new Atlas(graphicsDevice, "robo/robo.atlas", content));
             JsonDict.Add("robo", File.ReadAllText(Path.Combine(content.RootDirectory, "robo/robo.json")));
         }
 
@@ -42,6 +48,12 @@ namespace RoboFight
             foreach (Robot r in Enemies)
             {
                 r.Update(gameTime, gameCamera, gameMap, levelSectors, walkableLayers, gameHero);
+                r.Position = Vector2.Clamp(r.Position, gameCamera.Position - (new Vector2(gameCamera.Width + 300f, gameCamera.Height) / 2), gameCamera.Position + (new Vector2(gameCamera.Width + 300f, gameCamera.Height) / 2));
+            }
+
+            for (int i = Enemies.Count - 1; i >= 0; i--)
+            {
+                if (Enemies[i].Dead) Enemies.RemoveAt(i);
             }
         }
 
@@ -54,37 +66,44 @@ namespace RoboFight
             }
         }
 
-        public int Spawn(Map gameMap, Camera gameCamera, List<int> levelSectors)
+        public int Spawn(Map gameMap, Camera gameCamera, List<int> levelSectors, Robot gameHero)
         {
             int numSpawned = 0;
             // Left or right side?
-            int side = rand.Next(2);
-            if (side == 0) side = -1;
 
-            // Actual X spawn position
-            Vector2 spawnPos = new Vector2(gameCamera.Position.X + (((gameCamera.Width / 2) - 100f) * side), gameCamera.Position.Y - (gameCamera.Width / 2));
-
-            // Detect a Y position
-            bool spawned = false;
-            for (float y = spawnPos.Y; y < spawnPos.Y + gameCamera.Height; y += 20f)
+            for (int num = 0; num < 1 + rand.Next(gameHero.Sector); num++)
             {
-                if (!spawned)
-                {
-                    for (int i = 0; i < levelSectors.Count; i++)
-                    {
-                        MapObjectLayer walkableLayer = gameMap.GetLayer("Walkable" + levelSectors[i].ToString()) as MapObjectLayer;
-                        foreach (MapObject o in walkableLayer.Objects)
-                        {
-                            if (!spawned && Helper.IsPointInShape(new Vector2(spawnPos.X - ((gameMap.Width * gameMap.TileWidth) * i), y), o.LinePoints))
-                            {
-                                if (rand.Next(5) == 1)
-                                {
-                                    numSpawned++;
-                                    spawned = true;
+                if (numSpawned > largestNumberSpawned) break;
 
-                                    Robot r = new Robot(new Vector2(spawnPos.X,y), false);
-                                    r.LoadContent(skeletonRenderer, blankTex, AtlasDict["robo"], JsonDict["robo"]);
-                                    Enemies.Add(r);
+                int side = rand.Next(2);
+                if (side == 0) side = -1;
+
+                // Actual X spawn position
+                Vector2 spawnPos = new Vector2(gameCamera.Position.X + (((gameCamera.Width / 2) + 50f + ((float)rand.NextDouble() * 100f)) * side), gameCamera.Position.Y - (gameCamera.Width / 2));
+
+                // Detect a Y position
+                bool spawned = false;
+                for (float y = spawnPos.Y; y < spawnPos.Y + gameCamera.Height; y += 20f)
+                {
+                    if (!spawned)
+                    {
+                        for (int i = 0; i < levelSectors.Count; i++)
+                        {
+                            MapObjectLayer walkableLayer = gameMap.GetLayer("Walkable" + levelSectors[i].ToString()) as MapObjectLayer;
+                            foreach (MapObject o in walkableLayer.Objects)
+                            {
+                                if (!spawned && Helper.IsPointInShape(new Vector2(spawnPos.X - ((gameMap.Width * gameMap.TileWidth) * i), y), o.LinePoints))
+                                {
+                                    if (rand.Next(3) == 1)
+                                    {
+                                        numSpawned++;
+                                        spawned = true;
+
+                                        Robot r = new Robot(new Vector2(spawnPos.X, y), false);
+                                        if (rand.Next(5) == 0) ItemManager.Instance.Spawn(r);
+                                        r.LoadContent(skeletonRenderer, blankTex, AtlasDict["robo"], JsonDict["robo"]);
+                                        Enemies.Add(r);
+                                    }
                                 }
                             }
                         }
@@ -92,7 +111,34 @@ namespace RoboFight
                 }
             }
 
+            if (numSpawned > largestNumberSpawned) largestNumberSpawned = numSpawned;
+
             return numSpawned;
         }
+
+        public void CheckAttack(Vector2 pos, int faceDir, float power, float maxDist)
+        {
+            float mindist = 10000f;
+            Robot target = null;
+
+            foreach (Robot r in Enemies)
+            {
+                if ((r.Position - pos).Length() < mindist && (r.Position - pos).Length()<maxDist)
+                {
+                    if ((faceDir == 1 && r.Position.X > pos.X) || (faceDir == -1 && r.Position.X < pos.X))
+                    {
+                        if (r.Position.Y > pos.Y - 30f && r.Position.Y < pos.Y + 30f)
+                        {
+                            target = r;
+                            mindist = (r.Position - pos).Length();
+                        }
+                    }
+                }
+            }
+
+            if (target != null) target.DoHit(pos, power);
+        }
+
+        
     }
 }

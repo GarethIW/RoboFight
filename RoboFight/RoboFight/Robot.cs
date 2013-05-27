@@ -11,7 +11,7 @@ using TiledLib;
 
 namespace RoboFight
 {
-    class Robot
+    public class Robot
     {
         static Random rand = new Random();
 
@@ -27,6 +27,12 @@ namespace RoboFight
 
         public float Scale = 1f;
 
+        public float Health = 100f;
+        public bool Active = true;
+        public bool Dead = false;
+
+        public Item Item;
+
         Vector2 gravity = new Vector2(0f, 0.333f);
 
         Rectangle collisionRect = new Rectangle(0, 0, 85, 150);
@@ -39,7 +45,7 @@ namespace RoboFight
 
         float animTime;
 
-        int faceDir = 1;
+        public int faceDir = 1;
 
         bool walking = false;
         bool jumping = false;
@@ -56,7 +62,15 @@ namespace RoboFight
 
         bool pushingUp = false;
 
-        
+        float attackCharge = 0f;
+
+        double knockbackTime = 0;
+        double deadTime = 0;
+        float alpha = 1f;
+
+        bool pickingUp = false;
+        bool hasPickedUp = false;
+        double pickupTime = 0;
 
         // AI stuff
         Vector2 targetPosition = Vector2.Zero;
@@ -97,14 +111,23 @@ namespace RoboFight
             blankTex = content.Load<Texture2D>("blank");
 
             skeletonRenderer = new SkeletonRenderer(graphicsDevice);
-            Atlas atlas = new Atlas(graphicsDevice, Path.Combine(content.RootDirectory, "robo/robo.atlas"));
+            Atlas atlas = new Atlas(graphicsDevice, "robo/robo.atlas", content);
             SkeletonJson json = new SkeletonJson(atlas);
             skeleton = new Skeleton(json.readSkeletonData("robo", File.ReadAllText(Path.Combine(content.RootDirectory, "robo/robo.json"))));
             skeleton.SetSkin("default");
             skeleton.SetSlotsToBindPose();
+
+            
+            //skeleton.FindSlot("melee-item").Attachment = itemAttach;
+            skeleton.SetAttachment("melee-item", "crowbar");
+            
+
             Animations.Add("walk", skeleton.Data.FindAnimation("walk"));
             Animations.Add("punch-hold", skeleton.Data.FindAnimation("punch-hold"));
             Animations.Add("punch-release", skeleton.Data.FindAnimation("punch-release"));
+            Animations.Add("knockback", skeleton.Data.FindAnimation("knockback"));
+            Animations.Add("pickup", skeleton.Data.FindAnimation("pickup"));
+            Animations.Add("knockout", skeleton.Data.FindAnimation("knockout"));
 
             skeleton.RootBone.X = Position.X;
             skeleton.RootBone.Y = Position.Y;
@@ -112,6 +135,9 @@ namespace RoboFight
             skeleton.RootBone.ScaleY = Scale;
 
             skeleton.UpdateWorldTransform();
+
+
+            ItemManager.Instance.Spawn(this);
         }
 
         public void LoadContent(SkeletonRenderer sr, Texture2D bt, Atlas atlas, string json)
@@ -139,6 +165,9 @@ namespace RoboFight
             Animations.Add("walk", skeleton.Data.FindAnimation("walk"));
             Animations.Add("punch-hold", skeleton.Data.FindAnimation("punch-hold"));
             Animations.Add("punch-release", skeleton.Data.FindAnimation("punch-release"));
+            Animations.Add("knockback", skeleton.Data.FindAnimation("knockback"));
+            Animations.Add("pickup", skeleton.Data.FindAnimation("pickup"));
+            Animations.Add("knockout", skeleton.Data.FindAnimation("knockout"));
 
             skeleton.RootBone.X = Position.X;
             skeleton.RootBone.Y = Position.Y;
@@ -146,75 +175,219 @@ namespace RoboFight
             skeleton.RootBone.ScaleY = Scale;
 
             skeleton.UpdateWorldTransform();
+
+
         }
 
         public void Update(GameTime gameTime, Camera gameCamera, Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, Robot gameHero)
         {
-
-            if (!IsPlayer)
+            if (Active)
             {
-                if (notMovedTime > 500)
+                if (!IsPlayer)
                 {
-                    if (CheckJump(gameMap, levelSectors, walkableLayers))
+                    if (notMovedTime > 500)
                     {
-                        notMovedTime = 0;
-                        Jump();
+                        if (CheckJump(gameMap, levelSectors, walkableLayers))
+                        {
+                            notMovedTime = 0;
+                            Jump();
+                        }
                     }
-                }
 
-                if (notMovedTime > 1000)
-                {
-                    backingOff = true;
-                    targetPosition = MoveToRandomPosition(gameMap, levelSectors, walkableLayers);
-                }
-
-                if (!backingOff)
-                {
-                    targetPosition.X = gameHero.Position.X;
-                    targetPosition.Y = gameHero.landingHeight;
-                }
-                else
-                    if (rand.Next(250) == 1) backingOff = false;
-
-                if ((new Vector2(Position.X, landingHeight) - targetPosition).Length() < 100f)
-                {
-                    if (rand.Next(100) == 1)
+                    if (notMovedTime > 1000)
                     {
                         backingOff = true;
-                        targetPosition.X = (gameHero.Position.X - 300f) + (600f * (float)rand.NextDouble());
-                        targetPosition.Y = (gameHero.landingHeight - 100f) + (200f * (float)rand.NextDouble());
+                        targetPosition = MoveToRandomPosition(gameMap, levelSectors, walkableLayers);
+                    }
+
+                    if (!backingOff)
+                    {
+                        targetPosition.X = gameHero.Position.X;
+                        targetPosition.Y = gameHero.landingHeight;
+                    }
+                    else
+                        if (rand.Next(250) == 1) backingOff = false;
+
+                    if ((new Vector2(Position.X, landingHeight) - targetPosition).Length() < 100f)
+                    {
+                        if (rand.Next(100) == 1)
+                        {
+                            backingOff = true;
+                            targetPosition.X = (gameHero.Position.X - 300f) + (600f * (float)rand.NextDouble());
+                            targetPosition.Y = (gameHero.landingHeight - 100f) + (200f * (float)rand.NextDouble());
+                        }
+                    }
+
+                    if (targetPosition.X - 50 > Position.X)
+                        MoveLeftRight(1);
+
+                    if (targetPosition.X + 50 < Position.X)
+                        MoveLeftRight(-1);
+
+                    if (targetPosition.Y - landingHeight < -5 || targetPosition.Y - landingHeight > 5)
+                    {
+                        if (targetPosition.Y > landingHeight)
+                            MoveUpDown(1);
+
+                        if (targetPosition.Y < landingHeight)
+                            MoveUpDown(-1);
+                    }
+
+
+                    if (gameHero.Position.X > Position.X) faceDir = 1; else faceDir = -1;
+                }
+
+                if (!walking && !jumping && knockbackTime <= 0)
+                {
+                    Animations["walk"].Apply(skeleton, 0f, false);
+                }
+
+                if (walking && !jumping && knockbackTime <= 0)
+                {
+                    animTime += (gameTime.ElapsedGameTime.Milliseconds / 1000f) * 2;
+
+                    Animations["walk"].Mix(skeleton, animTime, true, 0.3f);
+                }
+
+                if (pickingUp)
+                {
+                    pickupTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+                    animTime += (gameTime.ElapsedGameTime.Milliseconds / 1000f) * 3;
+
+                    Animations["pickup"].Apply(skeleton, animTime, false);
+
+                    if (pickupTime > 150 && !hasPickedUp)
+                    {
+                        ItemManager.Instance.AttemptPickup(this);
+                        hasPickedUp = true;
+                    }
+                    if (pickupTime >= 300)
+                    {
+                        pickingUp = false;
+                        hasPickedUp = false;
                     }
                 }
 
-                if (targetPosition.X - 50 > Position.X)
-                    MoveLeftRight(1);
-
-                if (targetPosition.X + 50 < Position.X)
-                    MoveLeftRight(-1);
-
-                if (targetPosition.Y - landingHeight < -5 || targetPosition.Y - landingHeight > 5)
+                if (knockbackTime > 0)
                 {
-                    if (targetPosition.Y > landingHeight)
-                        MoveUpDown(1);
+                    knockbackTime -= gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (targetPosition.Y < landingHeight)
-                        MoveUpDown(-1);
+                    animTime += (gameTime.ElapsedGameTime.Milliseconds / 1000f) * 3;
+                    Animations["knockback"].Mix(skeleton, animTime, true, 0.3f);
+
+                    CheckCollision(gameTime, gameMap, levelSectors, walkableLayers);
+                    Position += (Speed);
+
+                    if (Speed.X > 0) Speed.X -= 0.1f;
+                    else if (Speed.X < 0) Speed.X += 0.1f;
+
+                    if (Speed.X > -0.1f && Speed.X < 0.1f) knockbackTime = 0;
                 }
+                else
+                {
+                    
+
+                    if (jumping)
+                    {
+                        Position += JumpSpeed;
+                        JumpSpeed += gravity;
+                        if (JumpSpeed.Y > 0f) { jumping = false; falling = true; }
+
+                        animTime += gameTime.ElapsedGameTime.Milliseconds / 1000f;
+                        //Animations["jump"].Mix(skeleton, animTime, false, 0.5f);
+                    }
+
+                    if (!jumping && !falling) landingHeight = Position.Y;
+
+                    if (punchHeld)
+                    {
+                        attackCharge += 0.25f;
+                        Animations["punch-hold"].Apply(skeleton, 1f, false);
+                    }
+                    else if (punchReleased)
+                    {
+                        if (punchReleaseTime == 0)
+                        {
+                            if (IsPlayer)
+                                EnemyManager.Instance.CheckAttack(Position, faceDir, attackCharge, 100f);
+                            else
+                                if ((Position - gameHero.Position).Length() < 100f) gameHero.DoHit(Position, attackCharge);
+                        }
+
+                        punchReleaseTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        if (punchReleaseTime >= 200)
+                        {
+                            punchReleaseTime = 0;
+                            punchReleased = false;
+                            Animations["punch-release"].Apply(skeleton, 0f, false);
+                        }
+
+                        Animations["punch-release"].Apply(skeleton, 1f, false);
+
+                        attackCharge = 0f;
+                    }
+
+                    attackCharge = MathHelper.Clamp(attackCharge, 0f, 50f);
+
+                    Speed.Normalize();
+
+                    if (Speed.Length() > 0f || pushingUp)
+                    {
+                        CheckCollision(gameTime, gameMap, levelSectors, walkableLayers);
+                        if (Speed.Length() > 0f)
+                            Position += (Speed * 4f);
+                    }
+
+                    Speed = Vector2.Zero;
+                }
+
+                if (Item != null)
+                {
+                    if (Item.Type == ItemType.Melee)
+                    {
+                        skeleton.SetAttachment("melee-item", Item.Name);
+                        skeleton.SetAttachment("projectile-item", null);
+                    }
+                    else
+                    {
+                        skeleton.SetAttachment("projectile-item", Item.Name);
+                        skeleton.SetAttachment("melee-item", null);
+                    }
+                }
+                else
+                {
+                    skeleton.SetAttachment("melee-item", null);
+                    skeleton.SetAttachment("projectile-item", null);
+                }
+
+                pushingUp = false;
+            }
+
+            if (Health <= 0)
+            {
+                Active = false;
+
+                animTime += (gameTime.ElapsedGameTime.Milliseconds / 1000f);
+                Animations["knockout"].Mix(skeleton, animTime, true, 0.2f);
+
+                deadTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (deadTime > 0 && deadTime<1000)
+                {
+                    CheckCollision(gameTime, gameMap, levelSectors, walkableLayers);
+                    Position.X += ((float)-faceDir) * (0.001f * (1000f - (float)deadTime));
+                }
+                if (deadTime > 2000 && alpha > 0f)
+                {
+                    alpha -= 0.025f;
+                    alpha = MathHelper.Clamp(alpha, 0f, 1f);
+                }
+
                 
 
-                if (gameHero.Position.X > Position.X) faceDir = 1; else faceDir = -1;
-            }
-
-            if (!walking && !jumping)
-            {
-                skeleton.SetToBindPose();
-            }
-
-            if (walking && !jumping)
-            {
-                animTime += (gameTime.ElapsedGameTime.Milliseconds / 1000f) * 2;
-               
-                    Animations["walk"].Mix(skeleton, animTime, true, 0.3f);
+                if (deadTime >= 3000)
+                {
+                    Dead = true;
+                }
             }
 
             if (falling)
@@ -230,56 +403,16 @@ namespace RoboFight
                 }
             }
 
-            if (jumping)
+            skeleton.A = alpha;
+            foreach (Slot s in skeleton.Slots)
             {
-                Position += JumpSpeed;
-                JumpSpeed += gravity;
-                if (JumpSpeed.Y > 0f) { jumping = false; falling = true; }
-
-                animTime += gameTime.ElapsedGameTime.Milliseconds / 1000f;
-                //Animations["jump"].Mix(skeleton, animTime, false, 0.5f);
+                s.A = skeleton.A;
             }
-
-            if (!jumping && !falling) landingHeight = Position.Y;
-
-            if (punchHeld)
-            {
-                //punchAnimTime += gameTime.ElapsedGameTime.Milliseconds / 1000f;
-                Animations["punch-hold"].Apply(skeleton, 1f, false);
-            }
-            else if (punchReleased)
-            {
-                punchReleaseTime += gameTime.ElapsedGameTime.TotalMilliseconds;
-                if (punchReleaseTime >= 200)
-                {
-                    punchReleaseTime = 0;
-                    punchReleased = false;
-                    //punchAnimTime = 0f;
-                }
-
-                //punchAnimTime += gameTime.ElapsedGameTime.Milliseconds / 1000f;
-                Animations["punch-release"].Apply(skeleton, 1f, false);
-
-            }
-
-           
-
-            //if (punchAnimTime > 10f) punchAnimTime = 0;
 
             skeleton.RootBone.ScaleX = Scale;
             skeleton.RootBone.ScaleY = Scale;
 
-            Speed.Normalize();
-
-            if (Speed.Length() > 0f || pushingUp)
-            {
-                CheckCollision(gameTime, gameMap, levelSectors, walkableLayers);
-                if(Speed.Length()>0f)
-                    Position += (Speed * 4f);
-            }
-
             collisionRect.Location = new Point((int)Position.X - (collisionRect.Width / 2), (int)Position.Y - (collisionRect.Height));
-            
 
             Position.X = MathHelper.Clamp(Position.X, 0, (gameMap.Width * gameMap.TileWidth) * levelSectors.Count);
             Position.Y = MathHelper.Clamp(Position.Y, 0, gameMap.Height * gameMap.TileHeight);
@@ -287,21 +420,16 @@ namespace RoboFight
             skeleton.RootBone.X = Position.X;
             skeleton.RootBone.Y = Position.Y;
 
-
             if (faceDir == -1) skeleton.FlipX = true; else skeleton.FlipX = false;
 
             skeleton.UpdateWorldTransform();
 
             walking = false;
-            Speed = Vector2.Zero;
-
 
             if (Position.X > (gameMap.Width * gameMap.TileWidth) * (Sector + 1))
                 Sector++;
             if (Position.X < (gameMap.Width * gameMap.TileWidth) * (Sector))
                 Sector--;
-
-            pushingUp = false;
         }
 
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Camera gameCamera)
@@ -316,9 +444,11 @@ namespace RoboFight
             //spriteBatch.End();
         }
 
+        
 
         public void MoveLeftRight(float dir)
         {
+            if (knockbackTime > 0 || pickingUp) return;
 
             if (dir > 0) faceDir = 1; else faceDir = -1;
 
@@ -329,6 +459,8 @@ namespace RoboFight
 
         public void MoveUpDown(float dir)
         {
+            if (knockbackTime > 0 || pickingUp) return;
+
             if(dir==-1) pushingUp = true;
             if (jumping || falling) return;
            // if (dir > 0) faceDir = 1; else faceDir = -1;
@@ -340,6 +472,7 @@ namespace RoboFight
 
         public void Jump()
         {
+            if (knockbackTime > 0 || pickingUp) return;
 
             if (!jumping && !falling)
             {
@@ -351,13 +484,19 @@ namespace RoboFight
             }
         }
 
-        public void Crouch()
+        public void Pickup()
         {
-           
+            if (knockbackTime > 0 || pickingUp || jumping || falling) return;
+
+            animTime = 0;
+            pickingUp = true;
+            pickupTime = 0;
         }
 
         public void Attack(bool p)
         {
+            if (knockbackTime > 0 || pickingUp) return;
+
             if (punchHeld && !p) punchReleased = true;
             punchHeld = p;
         }
@@ -423,12 +562,12 @@ namespace RoboFight
             {
                 if (CheckCollisionUp(gameMap, levelSectors, walkableLayers))
                 {
-                    if (!FallTest(gameMap, levelSectors, walkableLayers))
-                    {
+                    //if (!FallTest(gameMap, levelSectors, walkableLayers))
+                    //{
                         Speed.Y = 0f;
                         notMovedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
-                    }
-                    else notMovedTime = 0;
+                    //}
+                    //else notMovedTime = 0;
                 }
                 else notMovedTime = 0;
             }
@@ -579,6 +718,28 @@ namespace RoboFight
             }
 
             return false;
+        }
+
+        internal void DoHit(Vector2 pos, float power)
+        {
+            if (power > 5f && knockbackTime <= 0)
+            {
+                knockbackTime = (double)((power * 100f) / 2f);
+                Speed.X = 10f * -(float)faceDir;
+            }
+            Health -= power;
+
+            if (Health <= 0)
+            {
+                if (Item != null)
+                {
+                    Item.InWorld = true;
+                    Item.Position = Position + new Vector2(faceDir * 75, -75);
+                    Item.DroppedPosition = Position;
+                    Item.Speed.Y = 2f;
+                    Item = null;
+                }
+            }
         }
     }
 }
