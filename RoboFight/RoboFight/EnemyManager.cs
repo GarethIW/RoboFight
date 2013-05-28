@@ -116,27 +116,30 @@ namespace RoboFight
             return numSpawned;
         }
 
-        public void CheckAttack(Vector2 pos, int faceDir, float power, float maxDist)
+        public bool CheckAttack(Vector2 pos, int faceDir, float power, float maxDist, int maxHits)
         {
             float mindist = 10000f;
             Robot target = null;
+            int numHits = 0;
 
             foreach (Robot r in Enemies)
             {
-                if ((r.Position - pos).Length() < mindist && (r.Position - pos).Length()<maxDist)
+                if ((r.Position - pos).Length() < mindist && (r.Position - pos).Length()<maxDist && r.Active)
                 {
                     if ((faceDir == 1 && r.Position.X > pos.X) || (faceDir == -1 && r.Position.X < pos.X))
                     {
                         if (r.Position.Y > pos.Y - 30f && r.Position.Y < pos.Y + 30f)
                         {
-                            target = r;
+                            numHits++;
+                            if(numHits<=maxHits)
+                                r.DoHit(pos, power);
                             mindist = (r.Position - pos).Length();
                         }
                     }
                 }
             }
 
-            if (target != null) target.DoHit(pos, power);
+            return (numHits > 0);
         }
 
         

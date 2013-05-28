@@ -77,6 +77,7 @@ namespace RoboFight
         bool backingOff = false;
         double notMovedTime = 0;
 
+
         public Robot(Vector2 spawnpos, bool isPlayer)
         {
             IsPlayer = isPlayer;
@@ -208,6 +209,26 @@ namespace RoboFight
                     else
                         if (rand.Next(250) == 1) backingOff = false;
 
+                    if (Item == null)
+                    {
+                        Item tryItem = ItemManager.Instance.ClosestItem(this);
+                        if (tryItem != null)
+                        {
+                            if ((Position - tryItem.Position).Length() < 400f)
+                            {
+                                targetPosition = tryItem.Position;
+
+                                if (tryItem.Position.X > Position.X - 75f && tryItem.Position.X < Position.X + 75f)
+                                {
+                                    if (tryItem.Position.Y > landingHeight - 30f && tryItem.Position.Y < landingHeight + 30f)
+                                    {
+                                        Pickup();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     if ((new Vector2(Position.X, landingHeight) - targetPosition).Length() < 100f)
                     {
                         if (rand.Next(100) == 1)
@@ -233,8 +254,9 @@ namespace RoboFight
                             MoveUpDown(-1);
                     }
 
-
                     if (gameHero.Position.X > Position.X) faceDir = 1; else faceDir = -1;
+
+                   
                 }
 
                 if (!walking && !jumping && knockbackTime <= 0)
@@ -301,18 +323,42 @@ namespace RoboFight
 
                     if (punchHeld)
                     {
-                        attackCharge += 0.25f;
-                        Animations["punch-hold"].Apply(skeleton, 1f, false);
+                        if (Item == null)
+                        {
+                            attackCharge += 0.25f;
+                            Animations["punch-hold"].Apply(skeleton, 1f, false);
+                        }
+                        else if (Item.Type == ItemType.Melee)
+                        {
+                            attackCharge += 0.25f;
+                            Animations["punch-hold"].Apply(skeleton, 1f, false);
+                        }
+                        else if (Item.Type == ItemType.Projectile)
+                        {
+
+                        }
                     }
                     else if (punchReleased)
                     {
-                        if (punchReleaseTime == 0)
+                        if (Item == null)
                         {
-                            if (IsPlayer)
-                                EnemyManager.Instance.CheckAttack(Position, faceDir, attackCharge, 100f);
-                            else
-                                if ((Position - gameHero.Position).Length() < 100f) gameHero.DoHit(Position, attackCharge);
+                            if (punchReleaseTime == 0)
+                            {
+                                if (IsPlayer)
+                                    EnemyManager.Instance.CheckAttack(Position, faceDir, attackCharge, 100f, 1);
+                                else
+                                    if ((Position - gameHero.Position).Length() < 100f) gameHero.DoHit(Position, attackCharge);
+                            }
                         }
+                        else if (Item.Type == ItemType.Melee)
+                        {
+                            if (punchReleaseTime == 0)
+                            {
+                                Item.Use(faceDir, attackCharge, gameHero);
+                                
+                            }
+                        }
+
 
                         punchReleaseTime += gameTime.ElapsedGameTime.TotalMilliseconds;
                         if (punchReleaseTime >= 200)

@@ -35,7 +35,7 @@ namespace RoboFight
 
             skeletonRenderer = new SkeletonRenderer(graphicsDevice);
 
-            sourceDict.Add("crowbar", new Rectangle(71, 63, 50, 20));
+            sourceDict.Add("crowbar", new Rectangle(71, 63, 50, 19));
         }
 
         public void Update(GameTime gameTime, Camera gameCamera, Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, Robot gameHero)
@@ -95,17 +95,41 @@ namespace RoboFight
             {
                 foreach (Item i in Items)
                 {
-                    if (i.Position.X > robot.Position.X - 75f && i.Position.X < robot.Position.X + 75f)
+                    if (i.Health > 0f && !i.Dead && i.InWorld)
                     {
-                        if (i.Position.Y > robot.landingHeight - 30f && i.Position.Y < robot.landingHeight + 30f)
+                        if (i.Position.X > robot.Position.X - 75f && i.Position.X < robot.Position.X + 75f)
                         {
-                            i.InWorld = false;
-                            robot.Item = i;
-                            break;
+                            if (i.Position.Y > robot.landingHeight - 30f && i.Position.Y < robot.landingHeight + 30f)
+                            {
+                                i.InWorld = false;
+                                robot.Item = i;
+                                i.Owner = robot;
+                                break;
+                            }
                         }
                     }
                 }
             }
+        }
+
+        public Item ClosestItem(Robot robot)
+        {
+            float dist = 10000f;
+            Item returnItem = null;
+
+            foreach (Item i in Items)
+            {
+                if (i.Health > 0f && !i.Dead && i.InWorld)
+                {
+                    if ((robot.Position - i.Position).Length() < dist)
+                    {
+                        dist = (robot.Position - i.Position).Length();
+                        returnItem = i;
+                    }
+                }
+            }
+
+            return returnItem;
         }
     }
 }

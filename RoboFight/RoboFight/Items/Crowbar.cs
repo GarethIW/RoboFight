@@ -19,9 +19,21 @@ namespace RoboFight
             base.Update(gameTime);
         }
 
-        public override void Use()
+        public override void Use(int faceDir, float attackCharge, Robot gameHero)
         {
-            base.Use();
+            if (Owner.IsPlayer)
+            {
+                if (EnemyManager.Instance.CheckAttack(Owner.Position, faceDir, 35f, 100f, 2)) Health -= 10f;
+            }
+            else
+            {
+                if ((Owner.Position - gameHero.Position).Length() < 100f)
+                {
+                    gameHero.DoHit(Position, 35f);
+                    Health -= 10f;
+                }
+            }
+            base.Use(faceDir, attackCharge, gameHero);
         }
     }
 }

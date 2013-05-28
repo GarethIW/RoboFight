@@ -62,6 +62,13 @@ namespace RoboFight
 
             if (Health <= 0f)
             {
+                if(!InWorld)
+                {
+                    InWorld = true;
+                    Owner.Item = null;
+                    DroppedPosition = Owner.Position;
+                    Position = Owner.Position + new Vector2(Owner.faceDir * 75, -75);
+                }
                 alpha -= 0.01f;
                 alpha = MathHelper.Clamp(alpha, 0f, 1f);
                 if(alpha<=0f)
@@ -74,7 +81,7 @@ namespace RoboFight
             sb.Draw(itemTexture, Position, itemSource, Color.White * alpha, 0f, new Vector2(itemSource.Width, itemSource.Height)/2,1f, SpriteEffects.None, 1);
         }
 
-        public virtual void Use()
+        public virtual void Use(int faceDir, float attackCharge, Robot gameHero)
         {
 
         }
