@@ -12,6 +12,7 @@ namespace RoboFight
         public Crowbar(Texture2D tex, Rectangle src) : base(ItemType.Melee, tex, src) {
             Name = "crowbar";
             Health = 100f;
+            Range = 100f;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)

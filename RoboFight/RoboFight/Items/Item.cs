@@ -27,6 +27,7 @@ namespace RoboFight
         public bool Dead = false;
         public float Health;
         public Robot Owner;
+        public float Range;
 
         Texture2D itemTexture;
         Rectangle itemSource;

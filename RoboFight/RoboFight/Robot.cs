@@ -76,7 +76,7 @@ namespace RoboFight
         Vector2 targetPosition = Vector2.Zero;
         bool backingOff = false;
         double notMovedTime = 0;
-
+        bool AIchargingAttack = false;
 
         public Robot(Vector2 spawnpos, bool isPlayer)
         {
@@ -184,6 +184,9 @@ namespace RoboFight
         {
             if (Active)
             {
+                float attackRange = 100f;
+                if (Item != null) attackRange = Item.Range;
+
                 if (!IsPlayer)
                 {
                     if (notMovedTime > 500)
@@ -256,7 +259,33 @@ namespace RoboFight
 
                     if (gameHero.Position.X > Position.X) faceDir = 1; else faceDir = -1;
 
-                   
+                    // Attacking
+                    if (!AIchargingAttack && rand.Next(100) == 1)
+                    {
+                        AIchargingAttack = true;
+                    }
+
+                    if (AIchargingAttack) Attack(true);
+                    else Attack(false);
+
+
+
+                    if ((gameHero.Position - Position).Length() < attackRange && gameHero.Active)
+                    {
+                        if ((faceDir == 1 && gameHero.Position.X > Position.X) || (faceDir == -1 && gameHero.Position.X < Position.X))
+                        {
+                            if (gameHero.Position.Y > Position.Y - 30f && gameHero.Position.Y < Position.Y + 30f)
+                            {
+                                if (rand.Next(20) == 1)
+                                {
+                                    if (!AIchargingAttack) AIchargingAttack = true;
+                                    else Attack(false);
+                                }
+                            }
+                        }
+                    }
+
+                    ///////////////
                 }
 
                 if (!walking && !jumping && knockbackTime <= 0)
@@ -340,14 +369,16 @@ namespace RoboFight
                     }
                     else if (punchReleased)
                     {
+                        AIchargingAttack = false;
+
                         if (Item == null)
                         {
                             if (punchReleaseTime == 0)
                             {
                                 if (IsPlayer)
-                                    EnemyManager.Instance.CheckAttack(Position, faceDir, attackCharge, 100f, 1);
+                                    EnemyManager.Instance.CheckAttack(Position, faceDir, attackCharge, attackRange, 1);
                                 else
-                                    if ((Position - gameHero.Position).Length() < 100f) gameHero.DoHit(Position, attackCharge);
+                                    if ((Position - gameHero.Position).Length() < attackRange) gameHero.DoHit(Position, attackCharge);
                             }
                         }
                         else if (Item.Type == ItemType.Melee)
@@ -365,6 +396,7 @@ namespace RoboFight
                         {
                             punchReleaseTime = 0;
                             punchReleased = false;
+                            AIchargingAttack = false;
                             Animations["punch-release"].Apply(skeleton, 0f, false);
                         }
 
@@ -774,6 +806,9 @@ namespace RoboFight
                 Speed.X = 10f * -(float)faceDir;
             }
             Health -= power;
+
+            AIchargingAttack = false;
+            attackCharge = 0f;
 
             if (Health <= 0)
             {

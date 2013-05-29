@@ -17,7 +17,7 @@ namespace RoboFight
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
-        const int NUM_SECTORS = 2;
+        const int NUM_SECTORS = 3;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
