@@ -48,7 +48,7 @@ namespace RoboFight
             foreach (Robot r in Enemies)
             {
                 r.Update(gameTime, gameCamera, gameMap, levelSectors, walkableLayers, gameHero);
-                r.Position = Vector2.Clamp(r.Position, gameCamera.Position - (new Vector2(gameCamera.Width + 300f, gameCamera.Height) / 2), gameCamera.Position + (new Vector2(gameCamera.Width + 300f, gameCamera.Height) / 2));
+                r.Position = Vector2.Clamp(r.Position, gameCamera.Position - (new Vector2(gameCamera.Width + 300f, gameCamera.Height*2) / 2), gameCamera.Position + (new Vector2(gameCamera.Width + 300f, gameCamera.Height*2) / 2));
             }
 
             for (int i = Enemies.Count - 1; i >= 0; i--)
@@ -71,7 +71,7 @@ namespace RoboFight
             int numSpawned = 0;
             // Left or right side?
 
-            for (int num = 0; num < 1 + rand.Next(gameHero.Sector); num++)
+            for (int num = 0; num < 1 + rand.Next(gameHero.Sector+1); num++)
             {
                 if (numSpawned > largestNumberSpawned) break;
 
@@ -83,7 +83,7 @@ namespace RoboFight
 
                 // Detect a Y position
                 bool spawned = false;
-                for (float y = spawnPos.Y; y < spawnPos.Y + gameCamera.Height; y += 20f)
+                for (float y = spawnPos.Y; y < spawnPos.Y + gameCamera.Height; y += 15f)
                 {
                     if (!spawned)
                     {
@@ -132,7 +132,7 @@ namespace RoboFight
                         {
                             numHits++;
                             if(numHits<=maxHits)
-                                r.DoHit(pos, power);
+                                r.DoHit(pos, power, faceDir);
                             mindist = (r.Position - pos).Length();
                         }
                     }

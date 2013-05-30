@@ -17,7 +17,7 @@ namespace RoboFight
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
-        const int NUM_SECTORS = 3;
+        const int NUM_SECTORS = 4;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -34,6 +34,7 @@ namespace RoboFight
 
         List<int> levelSectors = new List<int>();
         List<Rectangle> triggerRects = new List<Rectangle>();
+        List<Color> sectorColors = new List<Color>();
 
         Dictionary<int, MapObjectLayer> WalkableLayers = new Dictionary<int, MapObjectLayer>();
 
@@ -42,6 +43,8 @@ namespace RoboFight
         float travelledDist = 0f;
 
         KeyboardState lks;
+
+        Color currentSectorColor;
 
         public Game()
         {
@@ -99,7 +102,7 @@ namespace RoboFight
             for (int i = 0; i < 3; i++)
                 GenerateSector();
 
-            
+            currentSectorColor = sectorColors[0];
         }
 
         /// <summary>
@@ -148,12 +151,15 @@ namespace RoboFight
                 gameCamera.ClampRect.X = (int)travelledDist;
                 gameCamera.ClampRect.Width = ((gameMap.Width * gameMap.TileWidth) * levelSectors.Count());
 
+                float colLerp = (1f / (gameMap.Width * gameMap.TileWidth)) * ((travelledDist + gameCamera.Width) - (gameHero.Sector * (gameMap.Width * gameMap.TileWidth)));
+                currentSectorColor = Color.Lerp(sectorColors[gameHero.Sector], sectorColors[gameHero.Sector + 1], colLerp);
+
                 gameHero.Position = Vector2.Clamp(gameHero.Position, gameCamera.Position - (new Vector2(gameCamera.Width, gameCamera.Height) / 2), gameCamera.Position + (new Vector2(gameCamera.Width, gameCamera.Height) / 2));
 
                 enemyManager.Update(gameTime, gameCamera, gameMap, levelSectors, WalkableLayers, gameHero);
                 itemManager.Update(gameTime, gameCamera, gameMap, levelSectors, WalkableLayers, gameHero);
 
-                if (levelSectors.Count - gameHero.Sector < 2)
+                if (levelSectors.Count - gameHero.Sector < 3)
                     GenerateSector();
 
                 CheckTriggers();
@@ -188,7 +194,7 @@ namespace RoboFight
             int x=0;
             foreach(int sec in levelSectors)
             {
-                gameMap.DrawLayer(spriteBatch, "Tile" + sec.ToString(), gameCamera, Color.White, false, 1f, new Vector2((gameMap.Width * gameMap.TileWidth) * x,0));
+                gameMap.DrawLayer(spriteBatch, "Tile" + sec.ToString(), gameCamera, currentSectorColor, false, 1f, new Vector2((gameMap.Width * gameMap.TileWidth) * x,0));
                 x++;
             }
 
@@ -209,9 +215,11 @@ namespace RoboFight
             int sect = rand.Next(NUM_SECTORS);
             levelSectors.Add(sect);
 
+            sectorColors.Add(new Color(0.5f + ((float)rand.NextDouble() * 0.5f), 0.5f + ((float)rand.NextDouble() * 0.5f), 0.5f + ((float)rand.NextDouble() * 0.5f)));
+
             MapObjectLayer triggerLayer = gameMap.GetLayer("Triggers" + sect.ToString()) as MapObjectLayer;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Rectangle trig = triggerLayer.Objects[rand.Next(triggerLayer.Objects.Count)].Location;
                 trig.Offset((gameMap.TileWidth * gameMap.Width) * (levelSectors.Count-1),0);

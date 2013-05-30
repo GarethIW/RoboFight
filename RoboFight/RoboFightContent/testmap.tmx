@@ -11,9 +11,40 @@
    H4sIAAAAAAAAC+3T0QqDMAwFUNn/f+G+xqeBSM1uqpsbnAN5kJQ2aeOyAAAAAAAAAACJ56Mfv2hb277Wf+3j9b3P3RWzNYz6Oztvo3tK7mqUT2vr9nG0tvP2M32k53b77/wz6bwkfWz3q/obvVFSZzVH1VnpDFXnXnHXR/u/y6fzMbvubHTqrfb4VH3fjhUTPKSMECcAAA==
   </data>
  </layer>
+ <layer name="Tile3" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2TPQrCQBBG16MIlppK+9hpr1Z6ACs9lbmD4hlsPJCzJIEhZiY/GIjwHrzCJOzONzOGAAAAAAAAAAAAAAAAMA6mk9x/Z2w5+tbSJcfQefv0dC4uxMxwKa6Me4bIo8/ucn4qrsWX4UbcOnd2rc3iFtr1Up+hZ7AT9+LT8CiexKRFjro6df1WlpjhLj4MdS/1GWnIZxC/mcmzs5PjWtwRv9P7VVdT3e+mZ7Gn7+DvQ9nL6pzKGXj75O2X1dc+OS7h+z+hjRnKXlbnFHvbtE/Wflk7nBT1WO8tDw05rAw6i7dP1n5552XO+3+z7Z6O3bbzRUTE3/gBzLwwExAnAAA=
+  </data>
+ </layer>
+ <objectgroup name="Triggers3" width="50" height="50">
+  <object x="240" y="2400" width="60" height="180"/>
+  <object x="540" y="2400" width="60" height="180"/>
+  <object x="900" y="2160" width="60" height="420"/>
+  <object x="1200" y="2160" width="60" height="420"/>
+  <object x="1500" y="2280" width="60" height="300"/>
+  <object x="1800" y="2040" width="60" height="540"/>
+  <object x="2040" y="2040" width="60" height="540"/>
+  <object x="2340" y="2040" width="60" height="540"/>
+  <object x="2640" y="2340" width="60" height="240"/>
+  <object x="2940" y="2400" width="60" height="180"/>
+ </objectgroup>
+ <objectgroup name="Walkable3" width="50" height="50">
+  <object x="0" y="2400">
+   <polygon points="0,0 720,1 779,59 1200,59 1379,-117 1621,-117 1799,60 2400,60 2520,-59 2877,-59 2940,1 2999,1 2999,180 0,180"/>
+  </object>
+  <object x="721" y="2281">
+   <polygon points="0,0 59,0 180,-120 659,-121 476,59 60,59"/>
+  </object>
+  <object x="1620" y="2160">
+   <polygon points="0,0 180,0 300,120 660,120 780,0 840,60 900,60 780,180 180,180"/>
+  </object>
+  <object x="1800" y="2040">
+   <polygon points="0,0 600,0 480,120 120,120"/>
+  </object>
+ </objectgroup>
  <layer name="Tile2" width="50" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2U3Q2CMBRGYRQT3cEJ3MU3ptIdMK7gTLQPTRrS+1NCpSTnJN8LXvA7eOswAAAAAAAAAAAAAADAGbmMddd7JfYtde7BI3WTOpbmS/ceybqD1ukR8jZya+RjvSdpR9bXo8Mc8jFyHdu4aO/X+izhddBc0vO27qC2v/m11yDvSo2D5LLlHHn2eI+uW128Di06xUwhXyVPp8vRDrPhETtbLiWPPXfjPsqZsmdrHqmz5CLt9L/2JX8/lofmIuVXSIt9yee9czUu3rNmOdT0884lF23ec9ZKv1We3KGVhzXvOWvW3Po/oUcPz/0134cHHmf0WAAhrEx7ECcAAA==
+   H4sIAAAAAAAAC+2U0Q3CMAxE01GQYAcmYBf+OhXs0KorwEo0H5Eiyz47gapFupNOiDQEP/vSlCiKoiiKoiiKoiiKoiiKoiiK+kedhrb1oyrXq9V8BI5Sm1Wjtl/77Z6SNaCabqufji8b8Xh9sjIi1zPDtHp2fB62YUH99Z4VRRkQSzmvN4Mov/XaI9lZaWGwWHruUSTHvbW+gaMsUYae/kU8rl4qz+L7PciyN8OkcNQsuWaPReP4RY6Lr4PtsTp7SfZMSs0Wi5XprfIiXfdnEZ+SA7FYfin+Ni/yubbmcdQs6L1QrPWupQ8oL1b9Wu3W/syC5hy5a9qsatcMWl3WPKxnUW7tPOs/tD7Is+Q7AfUmkifEgebrZcCanbc/2qtI9iLnRvKMZun9dwuHNws0y9Z7ibgic7Q4vDNRTlvufZQ5ure1j14d2R8mAnX1ECcAAA==
   </data>
  </layer>
  <objectgroup name="Triggers2" width="50" height="50">
@@ -31,7 +62,7 @@
  </objectgroup>
  <layer name="Tile1" width="50" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2VwQ2CMBSGHxO4hEe96b3edAEv6gBy0QX04jDsIGEEw0o+Yo01YFugrVT/L/lOQF//9A8lAgAAAAAAAAAAAADgNykMz3TPh0RBzfuNKYNK0WCsxL5/FVMOU9ahnKfNfN0+Y8rxfE/3f/hWjgk7ZTN2lPQ3o3dn7FzO8plRsAs29+CWXbKpksNXFiFnrtnSsRu59kqZ5zKH2qW9nJVS813Sx4Nce0f1jtlgyizo1aVx8sjiK8eRvVK9YzYZbHKoXTqxZw85LuyNPnesS4ZQXXLRMd05CArTJRcdM+UI0aUuHWtzP7nuUrWmi45V67S5k1x2Ke/5vdqxnNrfS6G7ZNOxcgD7gRDCf/MOv/RpKBAnAAA=
+   H4sIAAAAAAAAC+2VvU3EQBCF5yqgCULIIDcZNEACFMAl0AAkFHM9YLkEdC0xFrZuj5ufN/4RNponvcS79sznfbtLlEqlUqlUKpVKpVKpVCqVSv1PNc6YNb4kNST3uyaGUo3gtWrt/ZfyODzWpawnUt/qc00c/TzrfPgrjgv2JXvHPtuM946OfcW+7mrNyVixb9j1DH5k37K3BcdcLFVX8569n9gP3bfvinpTcpRZeu5qbUm+S8b4pfv2E51mDJHHXNEhS+ebH5bfHGU+kJ6luS3HK/uTTjOGMCAcZZbe2O9AfxqXxvrB/iI9Y0MY0CxJvdbOOLJ+kYxZ61CRnyWtH+ksst6TxiMZ8ziiWbJYIvvEy1jkfoqeS96/b78Z4dAy1n4ncidZ55LWD7JfrHctjj5jNcXvJSlLHgd6ZiHr0T8vM7Z3mCPZ8Z5H94bGjN5FU3BYz6zzV2NF/4E0F+G26iLztLrIPKR/hMf6Z0Pmof8dWTOptlZv7LpG9onFHcnM0H0zxRyLe0x/S/U3ub9T8xAnAAA=
   </data>
  </layer>
  <objectgroup name="Triggers1" width="50" height="50">
@@ -68,7 +99,7 @@
  </objectgroup>
  <layer name="Tile0" width="50" height="50">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2UMW4CMRBFvUdBokxoIEW6EJrQIxqUA0BDLpA0uQtRrgDaI4QzMUheyQz2zNjOQvOf9CW8u+P5f7yLcwAAAAAAAAAAAAAAAAAAAOCWtHfsW9M7rK/dq5ac/rHnWqa+kXpY+ks+b5FBm5XVwwPpkfSTqZnQ14rlzK3XX0hL0lHRgWnYxLOkPJXO66wJ6SnRY+yfmZJeSb+K1oksvEcqi3VeMa1Ic9IuknEf+Jm66zPmOnuOZXnzPZwwz5HPsSENmnxtqe6deS5RlyHmY+uv75T6Bas/sL34OtQ33fsrPEuuT9JXIseHn5VU/9xc1ncZ+e8cSTXa+8UVzqrER2kGXs/36dadT77mCu/HZt1nDilPTgYtR8qjNsMa77EsWgZrDv4dSH61GusMWnedJzeH5f39j1lb56XlsXosyVL7nWh+pXPpy1+Jcv93Q50Ane6NZhAnAAA=
+   H4sIAAAAAAAAC+2UMU4DMRBFvUeJRAlpgIKOhAZ6RIM4ADThAqHJXYK4QlZ7BHKmzEq2ZCZjz9jOhuY/6UvxZmfn/5lNnAMAAAAAAAAAAAAAAAAAAADnZPjHvi294/rWZ7VS0l+6b2CamlwPS/+cz3Nk0GZl9XBJuiJ9F+oh09eKZefW6/ekF9JeUc900clZUp5q5zXqhnSb6HHt71mQlqQfRe+JLLxHKot1XpJeSU+krZBxF/lZuOMdc42epSyPvofLzHPuc3yQZl25VlT3xjzXKGSQfKz89a1S/8zqe/Ysfo61oe9+K3fJtSZ9JXJ8+lnl6u+6v/UhI/9colyN9n5xxbOq8VGbgdfz54Rz8MnPXHF+adZT5sjlKckQvPdOzpHyqM2wxbuURcvAs2r71vJJO9J8pmYwuOM8pTks7+8pZm2dl5bH6rEmS+vvRPOb28tU/mpU+r8b6wA7++VeECcAAA==
   </data>
  </layer>
  <objectgroup name="Triggers0" width="50" height="50">

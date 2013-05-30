@@ -88,12 +88,12 @@ namespace RoboFight
                 Item dropItem = robot.Item;
                 robot.Item = null;
                 dropItem.InWorld = true;
-                dropItem.Position = robot.Position + new Vector2(robot.faceDir * 50, 0);
+                dropItem.Position = robot.Position + new Vector2(0, 0);
                 dropItem.DroppedPosition = robot.Position;
             }
             else
             {
-                foreach (Item i in Items)
+                foreach (Item i in Items.OrderBy(it => (it.Position-robot.Position).Length()))
                 {
                     if (i.Health > 0f && !i.Dead && i.InWorld)
                     {

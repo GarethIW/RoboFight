@@ -30,7 +30,7 @@ namespace RoboFight
             {
                 if ((Owner.Position - gameHero.Position).Length() < 100f)
                 {
-                    gameHero.DoHit(Position, 35f);
+                    gameHero.DoHit(Position, 35f, faceDir);
                     Health -= 10f;
                 }
             }
