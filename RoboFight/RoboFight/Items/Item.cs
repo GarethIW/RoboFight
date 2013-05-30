@@ -28,9 +28,12 @@ namespace RoboFight
         public float Health;
         public Robot Owner;
         public float Range;
+        public double Cooldown;
 
         Texture2D itemTexture;
         Rectangle itemSource;
+
+        internal double coolDownTime = 0;
 
         float alpha = 1f;
 
@@ -38,10 +41,13 @@ namespace RoboFight
         {
             itemTexture = tex;
             itemSource = src;
+            Type = type;
         }
 
         public virtual void Update(GameTime gameTime)
         {
+            coolDownTime -= gameTime.ElapsedGameTime.TotalMilliseconds;
+
             if (InWorld)
             {
                 Speed.Y += 0.25f;
@@ -84,7 +90,9 @@ namespace RoboFight
 
         public virtual void Use(int faceDir, float attackCharge, Robot gameHero)
         {
-
+            coolDownTime = Cooldown;
         }
+
+
     }
 }

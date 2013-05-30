@@ -13,6 +13,7 @@ namespace RoboFight
             Name = "crowbar";
             Health = 100f;
             Range = 100f;
+            Cooldown = 300;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -31,7 +32,7 @@ namespace RoboFight
                 if ((Owner.Position - gameHero.Position).Length() < 100f)
                 {
                     gameHero.DoHit(Position, 35f, faceDir);
-                    Health -= 10f;
+                    Health -= 2f;
                 }
             }
             base.Use(faceDir, attackCharge, gameHero);

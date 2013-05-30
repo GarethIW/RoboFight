@@ -64,6 +64,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="projectiles.png">
+      <Name>projectiles</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="robo\robo.atlas">
       <Name>robo</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

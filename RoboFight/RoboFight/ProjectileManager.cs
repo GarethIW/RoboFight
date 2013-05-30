@@ -24,11 +24,12 @@ namespace RoboFight
         public double Life;
         public float landingHeight;
         public float Power;
+        public Color Tint;
 
         public float alpha;
         public float rot;
 
-        public void Spawn(Vector2 pos, Vector2 speed, double life, bool heroowner, ProjectileType type, float pow)
+        public void Spawn(Vector2 pos, float landingheight, Vector2 speed, double life, bool heroowner, ProjectileType type, float pow, Color tint)
         {
             Active = true;
             Position = pos;
@@ -37,6 +38,8 @@ namespace RoboFight
             OwnedByHero = heroowner;
             Type = type;
             Power = pow;
+            Tint = tint;
+            landingHeight = landingheight;
 
             alpha = 1f;
             rot = Helper.V2ToAngle(Speed);
@@ -55,7 +58,7 @@ namespace RoboFight
 
         public Texture2D spriteSheet;
 
-        Vector2 frameSize = new Vector2(32, 32);
+        Vector2 frameSize = new Vector2(50, 50);
 
         public ProjectileManager()
         {
@@ -75,13 +78,13 @@ namespace RoboFight
             
         }
 
-        public void Add(Vector2 loc, Vector2 speed, double life, bool ownerhero, ProjectileType type, float pow)
+        public void Add(Vector2 loc, float lh, Vector2 speed, double life, bool ownerhero, ProjectileType type, float pow, Color tint)
         {
             foreach (Projectile p in Projectiles)
             {
                 if (!p.Active)
                 {
-                    p.Spawn(loc, speed, life, ownerhero, type, pow);
+                    p.Spawn(loc, lh, speed, life, ownerhero, type, pow, tint);
                     break;
                 }
             }
@@ -132,8 +135,11 @@ namespace RoboFight
                                     Projectiles[p].Position.Y>e.Position.Y-150 && Projectiles[p].Position.Y<e.Position.Y &&
                                     Projectiles[p].landingHeight>e.landingHeight-30 && Projectiles[p].landingHeight<e.landingHeight+30)
                                 {
-                                    e.DoHit(Projectiles[p].Position, Projectiles[p].Power, Projectiles[p].Speed.X > 0f ? 1 : -1);
-                                    Projectiles[p].Active = false;
+                                    if (e.Active)
+                                    {
+                                        e.DoHit(Projectiles[p].Position, Projectiles[p].Power, Projectiles[p].Speed.X > 0f ? 1 : -1);
+                                        Projectiles[p].Active = false;
+                                    }
                                 }
                             }
                         }
@@ -162,7 +168,7 @@ namespace RoboFight
             {
                 if (p.Active && p.landingHeight >= minY && p.landingHeight < maxY)
                 {
-                    sb.Draw(spriteSheet, p.Position, new Rectangle((int)p.Type * (int)frameSize.X, 0, (int)frameSize.X, (int)frameSize.Y), Color.White * p.alpha, p.rot, frameSize / 2, 1f, SpriteEffects.None, 1);
+                    sb.Draw(spriteSheet, p.Position, new Rectangle((int)p.Type * (int)frameSize.X, 0, (int)frameSize.X, (int)frameSize.Y), p.Tint * p.alpha, p.rot, frameSize / 2, 1f, SpriteEffects.None, 1);
                 }
             }
             sb.End();

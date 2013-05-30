@@ -75,6 +75,7 @@
     <Compile Include="ItemManager.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="Items\LaserPistol.cs" />
     <Compile Include="Items\Crowbar.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="ProjectileManager.cs" />

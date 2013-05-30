@@ -36,6 +36,7 @@ namespace RoboFight
             skeletonRenderer = new SkeletonRenderer(graphicsDevice);
 
             sourceDict.Add("crowbar", new Rectangle(71, 63, 50, 19));
+            sourceDict.Add("laserpistol", new Rectangle(51, 83, 46, 28));
         }
 
         public void Update(GameTime gameTime, Camera gameCamera, Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, Robot gameHero)
@@ -64,7 +65,7 @@ namespace RoboFight
 
         public void Spawn(Robot owner)
         {
-            int item = rand.Next(1);
+            int item = rand.Next(2);
 
             Item newItem = null;
 
@@ -73,6 +74,10 @@ namespace RoboFight
                 case 0:
                     // crowbar
                     newItem = new Crowbar(itemTex, sourceDict["crowbar"]);
+                    break;
+                case 1:
+                    // laserpistol
+                    newItem = new LaserPistol(itemTex, sourceDict["laserpistol"]);
                     break;
             }
 

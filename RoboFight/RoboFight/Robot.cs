@@ -120,7 +120,7 @@ namespace RoboFight
 
             
             //skeleton.FindSlot("melee-item").Attachment = itemAttach;
-            skeleton.SetAttachment("melee-item", "crowbar");
+            //skeleton.SetAttachment("melee-item", "crowbar");
             
 
             Animations.Add("walk", skeleton.Data.FindAnimation("walk"));
@@ -137,7 +137,7 @@ namespace RoboFight
 
             skeleton.UpdateWorldTransform();
 
-            Health = 500f;
+            Health = 10000f;
 
             ItemManager.Instance.Spawn(this);
         }
@@ -354,11 +354,12 @@ namespace RoboFight
 
                     if (!jumping && !falling) landingHeight = Position.Y;
 
-                    if (punchHeld)
+                    if (punchHeld && !punchReleased)
                     {
+                        
                         if (Item == null)
                         {
-                            attackCharge += 0.25f;
+                            attackCharge += 0.25f * (IsPlayer?2f:1f);
                             Animations["punch-hold"].Apply(skeleton, 1f, false);
                         }
                         else if (Item.Type == ItemType.Melee)
@@ -368,7 +369,10 @@ namespace RoboFight
                         }
                         else if (Item.Type == ItemType.Projectile)
                         {
-
+                            attackCharge += 0.25f;
+                            Animations["punch-release"].Apply(skeleton, 1f, false);
+                            if(IsPlayer || rand.Next(50)==0)
+                                Item.Use(faceDir, attackCharge, gameHero);
                         }
                     }
                     else if (punchReleased)
@@ -393,10 +397,13 @@ namespace RoboFight
                                 
                             }
                         }
-
+                        else if (Item.Type == ItemType.Projectile)
+                        {
+                            punchReleaseTime = Item.Cooldown;
+                        }
 
                         punchReleaseTime += gameTime.ElapsedGameTime.TotalMilliseconds;
-                        if (punchReleaseTime >= 200)
+                        if (punchReleaseTime >= (Item!=null?Item.Cooldown:200))
                         {
                             punchReleaseTime = 0;
                             punchReleased = false;
@@ -809,6 +816,8 @@ namespace RoboFight
 
         internal void DoHit(Vector2 pos, float power, int face)
         {
+            if (knockbackTime > 0) return;
+
             if (power > 5f && knockbackTime <= 0)
             {
                 knockbackTime = (double)((power * 100f) / 2f);

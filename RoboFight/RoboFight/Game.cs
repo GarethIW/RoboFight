@@ -27,6 +27,7 @@ namespace RoboFight
         Robot gameHero;
         EnemyManager enemyManager = new EnemyManager();
         ItemManager itemManager = new ItemManager();
+        ProjectileManager projectileManager = new ProjectileManager();
 
         Texture2D skyTex;
 
@@ -82,6 +83,7 @@ namespace RoboFight
 
             enemyManager.LoadContent(Content, GraphicsDevice);
             itemManager.LoadContent(Content, GraphicsDevice);
+            projectileManager.LoadContent(Content);
 
             gameHero = new Robot(Helper.PtoV((gameMap.GetLayer("Spawn") as MapObjectLayer).Objects[0].Location.Center), true);
             gameHero.LoadContent(Content, GraphicsDevice);
@@ -158,6 +160,7 @@ namespace RoboFight
 
                 enemyManager.Update(gameTime, gameCamera, gameMap, levelSectors, WalkableLayers, gameHero);
                 itemManager.Update(gameTime, gameCamera, gameMap, levelSectors, WalkableLayers, gameHero);
+                projectileManager.Update(gameTime, gameHero);
 
                 if (levelSectors.Count - gameHero.Sector < 3)
                     GenerateSector();
@@ -202,9 +205,11 @@ namespace RoboFight
 
             itemManager.Draw(GraphicsDevice, spriteBatch, gameCamera, 0f, gameHero.Position.Y);
             enemyManager.Draw(GraphicsDevice, spriteBatch, gameCamera, 0f, gameHero.Position.Y);
+            projectileManager.Draw(GraphicsDevice, spriteBatch, gameCamera, 0f, gameHero.Position.Y);
             gameHero.Draw(GraphicsDevice, spriteBatch, gameCamera);
             itemManager.Draw(GraphicsDevice, spriteBatch, gameCamera, gameHero.Position.Y, gameCamera.ClampRect.Height);
             enemyManager.Draw(GraphicsDevice, spriteBatch, gameCamera, gameHero.Position.Y, gameCamera.ClampRect.Height);
+            projectileManager.Draw(GraphicsDevice, spriteBatch, gameCamera, gameHero.Position.Y, gameCamera.ClampRect.Height);
 
 
             base.Draw(gameTime);
