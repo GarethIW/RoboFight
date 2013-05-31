@@ -17,7 +17,7 @@ namespace RoboFight
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
-        const int NUM_SECTORS = 4;
+        const int NUM_SECTORS = 5;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -263,6 +263,7 @@ namespace RoboFight
                     {
                         inTrigger = true;
                         gameCamera.Holding = true;
+                        gameCamera.HoldingPosition = gameHero.Position;
                     }
                 }
             }

@@ -2,9 +2,9 @@ Content\testmap.xnb
 Content\blank.xnb
 Content\robo\robo.xnb
 Content\sky.xnb
+Content\projectiles.xnb
 Content\tiles.xnb
 Content\tiles-glow.xnb
-Content\projectiles.xnb
 Content\robo\robo.atlas
 Content\robo\Robo.json
 Content\robo\robo.png

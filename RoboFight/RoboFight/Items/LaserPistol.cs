@@ -27,7 +27,7 @@ namespace RoboFight
 
             if (Owner.IsPlayer)
             {
-                ProjectileManager.Instance.Add(Owner.Position + new Vector2(Owner.faceDir * 60, -107), Owner.landingHeight - 1f, new Vector2(Owner.faceDir * 10f, 0f), 2000, true, ProjectileType.Laser, 35f, Color.Red);
+                ProjectileManager.Instance.Add(Owner.Position + new Vector2(Owner.faceDir * 60, -107), Owner.landingHeight - 1f, new Vector2(Owner.faceDir * 10f, 0f), 2000, true, ProjectileType.Laser, 15f, Color.Red);
 
                 Health -= 5f;
             }
@@ -35,7 +35,7 @@ namespace RoboFight
             {
                 if (Owner.landingHeight > gameHero.landingHeight-30 && Owner.landingHeight<gameHero.landingHeight+30)
                 {
-                    ProjectileManager.Instance.Add(Owner.Position + new Vector2(Owner.faceDir * 60, -107), Owner.landingHeight - 1f, new Vector2(Owner.faceDir * 10f, 0f), 2000, false, ProjectileType.Laser, 35f, Color.Red);
+                    ProjectileManager.Instance.Add(Owner.Position + new Vector2(Owner.faceDir * 60, -107), Owner.landingHeight - 1f, new Vector2(Owner.faceDir * 10f, 0f), 2000, false, ProjectileType.Laser, 15f, Color.Red);
 
                     Health -= 1f;
                 }

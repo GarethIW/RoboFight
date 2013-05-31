@@ -6,11 +6,6 @@
  <tileset firstgid="401" name="tiles-glow" tilewidth="60" tileheight="60">
   <image source="tiles-glow.png" width="1200" height="1200"/>
  </tileset>
- <layer name="Glow0" width="50" height="50" visible="0">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3T0QqDMAwFUNn/f+G+xqeBSM1uqpsbnAN5kJQ2aeOyAAAAAAAAAACJ56Mfv2hb277Wf+3j9b3P3RWzNYz6Oztvo3tK7mqUT2vr9nG0tvP2M32k53b77/wz6bwkfWz3q/obvVFSZzVH1VnpDFXnXnHXR/u/y6fzMbvubHTqrfb4VH3fjhUTPKSMECcAAA==
-  </data>
- </layer>
  <layer name="Tile3" width="50" height="50">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+2TPQrCQBBG16MIlppK+9hpr1Z6ACs9lbmD4hlsPJCzJIEhZiY/GIjwHrzCJOzONzOGAAAAAAAAAAAAAAAAMA6mk9x/Z2w5+tbSJcfQefv0dC4uxMxwKa6Me4bIo8/ucn4qrsWX4UbcOnd2rc3iFtr1Up+hZ7AT9+LT8CiexKRFjro6df1WlpjhLj4MdS/1GWnIZxC/mcmzs5PjWtwRv9P7VVdT3e+mZ7Gn7+DvQ9nL6pzKGXj75O2X1dc+OS7h+z+hjRnKXlbnFHvbtE/Wflk7nBT1WO8tDw05rAw6i7dP1n5552XO+3+z7Z6O3bbzRUTE3/gBzLwwExAnAAA=
@@ -130,5 +125,39 @@
  </objectgroup>
  <objectgroup name="Spawn" width="50" height="50">
   <object x="56" y="2416" width="118" height="108"/>
+ </objectgroup>
+ <layer name="Tile4" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2VPU4DQQyFJzfgCkjQQQd96KCHCnEAaMgFoIGzwB0SzRlypXjEjmQ5zz+7JASEn/SK1c6PP3vGU0oqlUqlUqlUKpVKpVKpVCqV+ouqhw5gR/oPHFX4N8vjiIzbtyK5tMZIjkOxeBxn5HPyZ8AX5Euw/k/I45iTr8irgK/JN2DtfWlMjh/JdwPL2vD9wPJQ/BrtSvMSz/HJ7IvliXw80/1M/xfkZbFrhBTtI1wfJZ7j7hfyq8PxRv/fi1+jo1k8Vu1cNoaWr57jVdnu/5Z7zD3XnAONRzVqe58KFotDY5DnxYu9j+8cUYbmXiN0VjlLlEMydC8CHBXM6zweR/etwxI5VxbD0olZ+4fqUpU5dYhZY/F6Wg0weL0Kxc8tx1r8GovW03jvjjBY5wcZ9SqPhee/sUTeHSsGVIcoh1WXzoJ6g3a/vHdHewO0sxS927xfeRySxeJA785a2aNZuw9er60iHhk7OltonuSwast7oFfbsfVA+/Jv1K+8elj3Tuud3+WoYC8ewxQObS3JOIUjMhfVZExNrXjletYaXqwonlq2Y0f7juWRdUbrWT1jyv2w3o0pHDJeq19M5UC9QjvLYzm0cXz9DekXGgAQJwAA
+  </data>
+ </layer>
+ <objectgroup name="Walkable4" width="50" height="50">
+  <object x="0" y="2400">
+   <polygon points="0,0 180,0 540,-360 720,-180 360,180 0,180"/>
+  </object>
+  <object x="540" y="1920">
+   <polygon points="0,0 660,0 840,180 180,180"/>
+  </object>
+  <object x="1200" y="1800">
+   <polygon points="0,0 780,0 600,180 180,180"/>
+  </object>
+  <object x="1980" y="1920">
+   <polygon points="0,0 300,0 120,180 -180,180"/>
+  </object>
+  <object x="2280" y="2040">
+   <polygon points="0,0 120,0 360,240 540,240 360,420 180,420 -60,180 -180,180"/>
+  </object>
+  <object x="2820" y="2400">
+   <polygon points="0,0 -180,180 180,180 180,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Triggers4" width="50" height="50">
+  <object x="60" y="2400" width="60" height="180"/>
+  <object x="420" y="2100" width="60" height="420"/>
+  <object x="960" y="1860" width="60" height="360"/>
+  <object x="1500" y="1740" width="60" height="420"/>
+  <object x="1980" y="1860" width="60" height="360"/>
+  <object x="2460" y="2040" width="60" height="480"/>
+  <object x="2880" y="2400" width="60" height="240"/>
  </objectgroup>
 </map>

@@ -12,6 +12,7 @@ namespace TiledLib
     {
         public Vector2 Position;
         public bool Holding;
+        public Vector2 HoldingPosition;
         public int Width;
         public int Height;
         public Vector2 Target;
@@ -101,7 +102,8 @@ namespace TiledLib
             }
             else
             {
-                Position.Y = MathHelper.Lerp(Position.Y, Target.Y, speed * 0.5f);
+                Target.X = MathHelper.Clamp(Target.X, HoldingPosition.X - 300f, HoldingPosition.X + 300f);
+                Position = Vector2.Lerp(Position, Target, speed * 0.5f);
             }
 
             CameraMatrix = Matrix.CreateTranslation(-(int)Position.X, -(int)Position.Y, 0) * Matrix.CreateScale(1f) * Matrix.CreateRotationZ(-Rotation) * Matrix.CreateTranslation(Width/2, Height-(bounds.Height/3),0);

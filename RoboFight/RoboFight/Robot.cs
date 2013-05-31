@@ -223,13 +223,15 @@ namespace RoboFight
                         {
                             if ((Position - tryItem.Position).Length() < 400f)
                             {
-                                targetPosition = tryItem.Position;
+                                if (rand.Next(100) == 1)
+                                    targetPosition = tryItem.Position;
 
                                 if (tryItem.Position.X > Position.X - 75f && tryItem.Position.X < Position.X + 75f)
                                 {
                                     if (tryItem.Position.Y > landingHeight - 30f && tryItem.Position.Y < landingHeight + 30f)
                                     {
-                                        Pickup();
+                                        if (rand.Next(10) == 1)
+                                            Pickup();
                                     }
                                 }
                             }
@@ -336,7 +338,7 @@ namespace RoboFight
                     if (Speed.X > 0) Speed.X -= 0.1f;
                     else if (Speed.X < 0) Speed.X += 0.1f;
 
-                    if (Speed.X > -0.1f && Speed.X < 0.1f) knockbackTime = 0;
+                    //if (Speed.X > -0.1f && Speed.X < 0.1f) knockbackTime = 0;
                 }
                 else
                 {
@@ -821,7 +823,9 @@ namespace RoboFight
             if (power > 5f && knockbackTime <= 0)
             {
                 knockbackTime = (double)((power * 100f) / 2f);
+                if (IsPlayer) knockbackTime *= 0.5;
                 Speed.X = 10f * (float)face;
+                jumping = false;
             }
             Health -= power;
 
