@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboFight", "RoboFight\RoboFight\RoboFight.csproj", "{63D41910-A0A7-41C9-A721-31D7EE052F0A}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "RoboFightContent", "RoboFight\RoboFightContent\RoboFightContent.contentproj", "{5FEA3538-61F7-491C-99F2-23BDF072DD69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboFightContent", "RoboFight\RoboFightContent\RoboFightContent.contentproj", "{5FEA3538-61F7-491C-99F2-23BDF072DD69}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TiledLib", "TiledLib", "{14FE48AB-7B93-4DBC-A464-EF20358AD6B0}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiledLib.Mono.Windows", "RoboFight\TiledLib.Mono.Windows\TiledLib.Mono.Windows.csproj", "{14AE59FB-38B9-4423-A3FF-3521ED686A33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiledContentPipeline", "RoboFight\TiledContentPipeline\TiledContentPipeline.csproj", "{84C8D1CA-634D-4977-ADD3-23CC6CB36F5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboFight.Mono.Windows", "RoboFight.Mono.Windows\RoboFight.Mono.Windows.csproj", "{12D53C65-20C9-4A02-B506-A512F0E5D0FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,16 @@ Global
 		{84C8D1CA-634D-4977-ADD3-23CC6CB36F5A}.Release|Mixed Platforms.Build.0 = Release|x86
 		{84C8D1CA-634D-4977-ADD3-23CC6CB36F5A}.Release|x86.ActiveCfg = Release|x86
 		{84C8D1CA-634D-4977-ADD3-23CC6CB36F5A}.Release|x86.Build.0 = Release|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Debug|x86.ActiveCfg = Debug|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Debug|x86.Build.0 = Debug|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Release|Any CPU.ActiveCfg = Release|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Release|Mixed Platforms.Build.0 = Release|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Release|x86.ActiveCfg = Release|x86
+		{12D53C65-20C9-4A02-B506-A512F0E5D0FF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

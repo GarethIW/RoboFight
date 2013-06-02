@@ -137,7 +137,7 @@ namespace RoboFight
                                 {
                                     if (e.Active)
                                     {
-                                        e.DoHit(Projectiles[p].Position, Projectiles[p].Power, Projectiles[p].Speed.X > 0f ? 1 : -1);
+                                        e.DoHit(Projectiles[p].Position, Projectiles[p].Power, Projectiles[p].Speed.X > 0f ? 1 : -1, gameHero);
                                         Projectiles[p].Active = false;
                                     }
                                 }
@@ -149,7 +149,7 @@ namespace RoboFight
                                     Projectiles[p].Position.Y > gameHero.Position.Y - 150 && Projectiles[p].Position.Y < gameHero.Position.Y &&
                                     Projectiles[p].landingHeight > gameHero.landingHeight - 30 && Projectiles[p].landingHeight < gameHero.landingHeight + 30)
                             {
-                                gameHero.DoHit(Projectiles[p].Position, Projectiles[p].Power, Projectiles[p].Speed.X > 0f ? 1 : -1);
+                                gameHero.DoHit(Projectiles[p].Position, Projectiles[p].Power, Projectiles[p].Speed.X > 0f ? 1 : -1, gameHero);
                                 Projectiles[p].Active = false;
                             }
                                     

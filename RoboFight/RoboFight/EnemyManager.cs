@@ -18,6 +18,7 @@ namespace RoboFight
         public static EnemyManager Instance;
 
         Texture2D blankTex;
+        public Texture2D hudTex;
 
         SkeletonRenderer skeletonRenderer;
 
@@ -26,7 +27,9 @@ namespace RoboFight
 
         static Random rand = new Random();
 
-        int largestNumberSpawned = 0;
+        public int largestNumberSpawned = 0;
+
+        public int spawnsWithoutWeapon = 0;
 
         public EnemyManager()
         {
@@ -36,6 +39,7 @@ namespace RoboFight
         public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
         {
             blankTex = content.Load<Texture2D>("blank");
+            hudTex = content.Load<Texture2D>("particles");
 
             skeletonRenderer = new SkeletonRenderer(graphicsDevice);
 
@@ -71,7 +75,9 @@ namespace RoboFight
             int numSpawned = 0;
             // Left or right side?
 
-            for (int num = 0; num < 1 + rand.Next(gameHero.Sector+1); num++)
+            bool weaponspawned = false;
+
+            for (int num = 0; num < 1 + rand.Next(gameHero.Sector+2); num++)
             {
                 if (numSpawned > largestNumberSpawned) break;
 
@@ -100,7 +106,15 @@ namespace RoboFight
                                         spawned = true;
 
                                         Robot r = new Robot(new Vector2(spawnPos.X, y), false);
-                                        if (rand.Next(5) == 0) ItemManager.Instance.Spawn(r);
+
+                                        if ((rand.Next(5) == 0 || spawnsWithoutWeapon == 3) && !weaponspawned)
+                                        {
+                                            spawnsWithoutWeapon = 0;
+                                            ItemManager.Instance.Spawn(r);
+                                            weaponspawned = true;
+                                        }
+                                        else spawnsWithoutWeapon++;
+
                                         r.LoadContent(skeletonRenderer, blankTex, AtlasDict["robo"], JsonDict["robo"]);
                                         Enemies.Add(r);
                                     }
@@ -116,11 +130,12 @@ namespace RoboFight
             return numSpawned;
         }
 
-        public bool CheckAttack(Vector2 pos, int faceDir, float power, float maxDist, int maxHits)
+        public bool CheckAttack(Vector2 pos, int faceDir, float power, float maxDist, int maxHits, Robot gameHero)
         {
             float mindist = 10000f;
             Robot target = null;
             int numHits = 0;
+            
 
             foreach (Robot r in Enemies)
             {
@@ -132,7 +147,7 @@ namespace RoboFight
                         {
                             numHits++;
                             if(numHits<=maxHits)
-                                r.DoHit(pos, power, faceDir);
+                                r.DoHit(pos, power, faceDir, gameHero);
                             mindist = (r.Position - pos).Length();
                         }
                     }

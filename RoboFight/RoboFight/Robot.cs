@@ -31,11 +31,15 @@ namespace RoboFight
         public bool Active = true;
         public bool Dead = false;
 
+        int furthestX = 0;
+
+        public int Score;
+
         public Item Item;
 
         Vector2 gravity = new Vector2(0f, 0.333f);
 
-        Rectangle collisionRect = new Rectangle(0, 0, 85, 150);
+        Rectangle collisionRect = new Rectangle(0, 0, 3, 150);
 
         Texture2D blankTex;
 
@@ -84,6 +88,7 @@ namespace RoboFight
             spawnPosition = spawnpos;
 
             Position = spawnPosition;
+            furthestX = (int)spawnPosition.X;
         }
         public Robot(Vector2 spawnpos, bool isPlayer, Robot gameHero)
         {
@@ -94,8 +99,10 @@ namespace RoboFight
             if (Position.X > gameHero.Position.X) faceDir = -1; else faceDir = 1;
         }
 
-        public void Reset()
+        public void Reset(Vector2 spawn)
         {
+            spawnPosition = spawn;
+
             faceDir = 1;
 
             walking = false;
@@ -103,8 +110,23 @@ namespace RoboFight
             falling = false;
 
             Position = spawnPosition;
+            furthestX = (int)spawnPosition.X;
 
             Speed = Vector2.Zero;
+
+            Health = 121f;
+
+            Dead = false;
+            deadTime = 0;
+            Active = true;
+
+            alpha = 1f;
+
+            Score = 0;
+
+            knockbackTime = 0;
+            landingHeight = spawnPosition.Y;
+            Sector = 0;
         }
 
         public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
@@ -137,9 +159,13 @@ namespace RoboFight
 
             skeleton.UpdateWorldTransform();
 
-            Health = 10000f;
+            Health = 121f;
 
-            ItemManager.Instance.Spawn(this);
+            //ItemManager.Instance.Spawn(this);
+
+            //skeleton.SetAttachment("melee-item", null);
+
+            skeleton.FindSlot("fist-item").A = 0f;
         }
 
         public void LoadContent(SkeletonRenderer sr, Texture2D bt, Atlas atlas, string json)
@@ -157,7 +183,7 @@ namespace RoboFight
 
             foreach (Slot s in skeleton.Slots)
             {
-                if (s.Data.Name != "melee-item" && s.Data.Name != "projectile-item")
+                if (s.Data.Name != "melee-item" && s.Data.Name != "projectile-item" && s.Data.Name != "fist-item")
                 {
                     s.Data.R = skeleton.R;
                     s.Data.G = skeleton.G;
@@ -181,7 +207,7 @@ namespace RoboFight
 
             skeleton.UpdateWorldTransform();
 
-
+            skeleton.FindSlot("fist-item").A = 0f;
         }
 
         public void Update(GameTime gameTime, Camera gameCamera, Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, Robot gameHero)
@@ -193,6 +219,8 @@ namespace RoboFight
 
                 if (!IsPlayer)
                 {
+                   
+
                     if (notMovedTime > 500)
                     {
                         if (CheckJump(gameMap, levelSectors, walkableLayers))
@@ -240,7 +268,7 @@ namespace RoboFight
 
                     if ((new Vector2(Position.X, landingHeight) - targetPosition).Length() < 100f)
                     {
-                        if (rand.Next(100) == 1)
+                        if (rand.Next(50) == 1)
                         {
                             backingOff = true;
                             targetPosition.X = (gameHero.Position.X - 300f) + (600f * (float)rand.NextDouble());
@@ -294,6 +322,12 @@ namespace RoboFight
                     ///////////////
                 }
 
+                if ((int)Position.X > furthestX)
+                {
+                    furthestX = (int)Position.X;
+                    Score++;
+                }
+
                 if (!walking && !jumping && knockbackTime <= 0)
                 {
                     Animations["walk"].Apply(skeleton, 0f, false);
@@ -332,7 +366,7 @@ namespace RoboFight
                     animTime += (gameTime.ElapsedGameTime.Milliseconds / 1000f) * 3;
                     Animations["knockback"].Mix(skeleton, animTime, true, 0.3f);
 
-                    CheckCollision(gameTime, gameMap, levelSectors, walkableLayers);
+                    CheckCollision(gameTime, gameMap, levelSectors, walkableLayers, gameHero.Sector);
                     Position += (Speed);
 
                     if (Speed.X > 0) Speed.X -= 0.1f;
@@ -376,6 +410,10 @@ namespace RoboFight
                             if(IsPlayer || rand.Next(50)==0)
                                 Item.Use(faceDir, attackCharge, gameHero);
                         }
+
+                        if(rand.Next(51 - (int)attackCharge)==0 && Item==null)
+                            ParticleManager.Instance.Add(ParticleType.Standard, (Position - new Vector2(faceDir * 50, 75)) + (new Vector2(-15f + ((float)rand.NextDouble() * 30f), -10f + ((float)rand.NextDouble() * 20f))), (landingHeight - 10f) + ((float)rand.NextDouble() * 20f), new Vector2(-0.5f + (float)rand.NextDouble() * 1f, -0.5f + (float)rand.NextDouble() * 1f), 0f, true, new Rectangle(0, 0, 2, 2), 0f, Color.DeepSkyBlue);
+                        
                     }
                     else if (punchReleased)
                     {
@@ -386,9 +424,9 @@ namespace RoboFight
                             if (punchReleaseTime == 0)
                             {
                                 if (IsPlayer)
-                                    EnemyManager.Instance.CheckAttack(Position, faceDir, attackCharge, attackRange, 1);
+                                    EnemyManager.Instance.CheckAttack(Position, faceDir, attackCharge, attackRange, 1, gameHero);
                                 else
-                                    if ((Position - gameHero.Position).Length() < attackRange) gameHero.DoHit(Position, attackCharge, faceDir);
+                                    if ((Position - gameHero.Position).Length() < attackRange) gameHero.DoHit(Position, attackCharge, faceDir, gameHero);
                             }
                         }
                         else if (Item.Type == ItemType.Melee)
@@ -424,7 +462,7 @@ namespace RoboFight
 
                     if (Speed.Length() > 0f || pushingUp)
                     {
-                        CheckCollision(gameTime, gameMap, levelSectors, walkableLayers);
+                        CheckCollision(gameTime, gameMap, levelSectors, walkableLayers, gameHero.Sector);
                         if (Speed.Length() > 0f)
                             Position += (Speed * 4f);
                     }
@@ -444,9 +482,18 @@ namespace RoboFight
                         skeleton.SetAttachment("projectile-item", Item.Name);
                         skeleton.SetAttachment("melee-item", null);
                     }
+
+                    //skeleton.FindSlot("fist-item").A = 1f;
+                    if (skeleton.FindSlot("fist-item").A > 0f) skeleton.FindSlot("fist-item").A -= 0.1f;
                 }
                 else
                 {
+                    if (attackCharge > 0f)
+                        skeleton.FindSlot("fist-item").A = (1f / 50f) * attackCharge;
+                    else
+                        if (skeleton.FindSlot("fist-item").A > 0f) skeleton.FindSlot("fist-item").A -= 0.1f;
+                    skeleton.SetAttachment("fist-item", "fistweap" + (rand.Next(2) + 1).ToString());
+
                     skeleton.SetAttachment("melee-item", null);
                     skeleton.SetAttachment("projectile-item", null);
                 }
@@ -454,7 +501,7 @@ namespace RoboFight
                 pushingUp = false;
             }
 
-            if (Health <= 0)
+            if (Health <= 1f)
             {
                 Active = false;
 
@@ -464,7 +511,7 @@ namespace RoboFight
                 deadTime += gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (deadTime > 0 && deadTime<1000)
                 {
-                    CheckCollision(gameTime, gameMap, levelSectors, walkableLayers);
+                    CheckCollision(gameTime, gameMap, levelSectors, walkableLayers, gameHero.Sector);
                     Position.X += ((float)-faceDir) * (0.001f * (1000f - (float)deadTime));
                 }
                 if (deadTime > 2000 && alpha > 0f)
@@ -473,7 +520,7 @@ namespace RoboFight
                     alpha = MathHelper.Clamp(alpha, 0f, 1f);
                 }
 
-                
+                if (skeleton.FindSlot("fist-item").A > 0f) skeleton.FindSlot("fist-item").A -= 0.1f;
 
                 if (deadTime >= 3000)
                 {
@@ -497,7 +544,10 @@ namespace RoboFight
             skeleton.A = alpha;
             foreach (Slot s in skeleton.Slots)
             {
-                s.A = skeleton.A;
+                if (s.Data.Name != "melee-item" && s.Data.Name != "projectile-item" && s.Data.Name != "fist-item")
+                {
+                    s.A = skeleton.A;
+                }
             }
 
             skeleton.RootBone.ScaleX = Scale;
@@ -521,6 +571,8 @@ namespace RoboFight
                 Sector++;
             if (Position.X < (gameMap.Width * gameMap.TileWidth) * (Sector))
                 Sector--;
+
+            Health = MathHelper.Clamp(Health, 0f, 121f);
         }
 
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Camera gameCamera)
@@ -530,9 +582,28 @@ namespace RoboFight
             skeletonRenderer.End();
 
             // Draw collision box
-            //spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, gameCamera.CameraMatrix);
+            
             //spriteBatch.Draw(blankTex, collisionRect, Color.White * 0.3f);
             //spriteBatch.End();
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, gameCamera.CameraMatrix);
+
+            if (!IsPlayer)
+            {
+                Vector2 pos = Position + new Vector2(-25, -150);
+                int i = 0;
+
+                for (i = 0; i < (int)(Health/10f); i++)
+                {
+                    spriteBatch.Draw(EnemyManager.Instance.hudTex, pos, new Rectangle(11, 0, 15, 8), Color.Red, 0f, new Vector2(7, 4), 0.5f, i % 2 == 0 ? SpriteEffects.None : SpriteEffects.FlipVertically, 1);
+                    pos.X += 5;
+                }
+
+                spriteBatch.Draw(EnemyManager.Instance.hudTex, pos, new Rectangle(11, 0, 15, 8), Color.Red * ((Health/10f) - (int)(Health/10f)), 0f, new Vector2(7, 4), 0.5f, i % 2 == 0 ? SpriteEffects.None : SpriteEffects.FlipVertically, 1);
+
+            }
+
+            spriteBatch.End();
         }
 
         
@@ -593,7 +664,7 @@ namespace RoboFight
         }
 
 
-        void CheckCollision(GameTime gameTime, Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers)
+        void CheckCollision(GameTime gameTime, Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, int ghs)
         {
             if ((jumping || falling))
             {
@@ -602,16 +673,16 @@ namespace RoboFight
 
                 for (landingHeight = originalLandingHeight; landingHeight >= Position.Y; landingHeight--)
                 {
-                    if (Speed.X < 0 && !CheckCollisionLeft(gameMap, levelSectors, walkableLayers)) { found = true; break; }
-                    if (Speed.X > 0 && !CheckCollisionRight(gameMap, levelSectors, walkableLayers)) { found = true; break; }
-                    if (pushingUp && !CheckCollisionUp(gameMap, levelSectors, walkableLayers)) { found = true; break; }
+                    if (Speed.X < 0 && !CheckCollisionLeft(gameMap, levelSectors, walkableLayers, ghs)) { found = true; break; }
+                    if (Speed.X > 0 && !CheckCollisionRight(gameMap, levelSectors, walkableLayers, ghs)) { found = true; break; }
+                    if (pushingUp && !CheckCollisionUp(gameMap, levelSectors, walkableLayers, ghs)) { found = true; break; }
                 }
                 if (!found) landingHeight = originalLandingHeight;
             }
 
             if (Speed.X > 0f)
             {
-                if (CheckCollisionRight(gameMap, levelSectors, walkableLayers))
+                if (CheckCollisionRight(gameMap, levelSectors, walkableLayers, ghs))
                 {
                     if (!FallTest(gameMap, levelSectors, walkableLayers))
                     {
@@ -624,7 +695,7 @@ namespace RoboFight
             }
             if (Speed.X < 0f)
             {
-                if (CheckCollisionLeft(gameMap, levelSectors, walkableLayers))
+                if (CheckCollisionLeft(gameMap, levelSectors, walkableLayers, ghs))
                 {
                     if (!FallTest(gameMap, levelSectors, walkableLayers))
                     {
@@ -638,7 +709,7 @@ namespace RoboFight
 
             if (Speed.Y > 0f)
             {
-                if (CheckCollisionDown(gameMap, levelSectors, walkableLayers))
+                if (CheckCollisionDown(gameMap, levelSectors, walkableLayers, ghs))
                 {
                     if (!FallTest(gameMap, levelSectors, walkableLayers))
                     {
@@ -651,7 +722,7 @@ namespace RoboFight
             }
             if (Speed.Y < 0f || ((jumping || falling) && pushingUp))
             {
-                if (CheckCollisionUp(gameMap, levelSectors, walkableLayers))
+                if (CheckCollisionUp(gameMap, levelSectors, walkableLayers, ghs))
                 {
                     //if (!FallTest(gameMap, levelSectors, walkableLayers))
                     //{
@@ -700,10 +771,11 @@ namespace RoboFight
             return false;
         }
 
-        bool CheckCollisionRight(Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers)
+        bool CheckCollisionRight(Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, int ghs)
         {
             for (int i = 0; i < levelSectors.Count; i++)
             {
+                if (i < ghs - 1 || i > ghs + 1) continue;
                 MapObjectLayer walkableLayer = walkableLayers[levelSectors[i]];
 
                 for (int o = 0; o < walkableLayer.Objects.Count; o++)
@@ -715,10 +787,11 @@ namespace RoboFight
 
             return true;
         }
-        bool CheckCollisionLeft(Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers)
+        bool CheckCollisionLeft(Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, int ghs)
         {
             for (int i = 0; i < levelSectors.Count; i++)
             {
+                if (i < ghs - 1 || i > ghs + 1) continue;
                 MapObjectLayer walkableLayer = walkableLayers[levelSectors[i]];
 
                 for (int o = 0; o < walkableLayer.Objects.Count; o++)
@@ -730,10 +803,11 @@ namespace RoboFight
 
             return true;
         }
-        bool CheckCollisionUp(Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers)
+        bool CheckCollisionUp(Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, int ghs)
         {
             for (int i = 0; i < levelSectors.Count; i++)
             {
+                if (i < ghs - 1 || i > ghs + 1) continue;
                 MapObjectLayer walkableLayer = walkableLayers[levelSectors[i]];
 
                 for (int o = 0; o < walkableLayer.Objects.Count;o++)
@@ -744,10 +818,11 @@ namespace RoboFight
 
             return true;
         }
-        bool CheckCollisionDown(Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers)
+        bool CheckCollisionDown(Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, int ghs)
         {
             for (int i = 0; i < levelSectors.Count; i++)
             {
+                if (i < ghs - 1 || i > ghs + 1) continue;
                 MapObjectLayer walkableLayer = walkableLayers[levelSectors[i]];
 
                 for (int o = 0; o < walkableLayer.Objects.Count; o++)
@@ -816,7 +891,7 @@ namespace RoboFight
             return false;
         }
 
-        internal void DoHit(Vector2 pos, float power, int face)
+        internal void DoHit(Vector2 pos, float power, int face, Robot gameHero)
         {
             if (knockbackTime > 0) return;
 
@@ -825,9 +900,23 @@ namespace RoboFight
                 knockbackTime = (double)((power * 100f) / 2f);
                 if (IsPlayer) knockbackTime *= 0.5;
                 Speed.X = 10f * (float)face;
-                jumping = false;
+
+                if (jumping)
+                {
+                    jumping = false;
+                    falling = true;
+                }
             }
-            Health -= power;
+
+            if (IsPlayer)
+                Health -= (power / 2f);
+            else
+            {
+                gameHero.Score += (int)power;
+                Health -= power;
+            }
+
+            ParticleManager.Instance.AddHurt(Position + new Vector2(0,-75f), new Vector2((power/5f) * face,0f), landingHeight, tint);
 
             AIchargingAttack = false;
             attackCharge = 0f;
@@ -841,6 +930,19 @@ namespace RoboFight
                     Item.DroppedPosition = Position;
                     Item.Speed.Y = 2f;
                     Item = null;
+                }
+
+                if (!IsPlayer)
+                {
+                    gameHero.Score += 500;
+
+                    if ((int)gameHero.Health < 120)
+                    {
+                        for (int i = 0; i < ((120 - (int)gameHero.Health)/2) + (rand.Next((120 - (int)gameHero.Health)) / 2); i++)
+                        {
+                            ParticleManager.Instance.Add(ParticleType.Health, Position + new Vector2(0, -75f), (landingHeight - 10f) + ((float)rand.NextDouble() * 20f), new Vector2(-10f + ((float)rand.NextDouble() * 20f), 0), 2000, true, new Rectangle(11, 0, 15, 8), (float)rand.NextDouble() * MathHelper.TwoPi, Color.Red);
+                        }
+                    }
                 }
             }
         }

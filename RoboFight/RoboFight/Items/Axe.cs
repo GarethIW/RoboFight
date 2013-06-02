@@ -7,12 +7,12 @@ using System.Text;
 
 namespace RoboFight
 {
-    class Crowbar : Item
+    class Axe : Item
     {
-        public Crowbar(Texture2D tex, Rectangle src) : base(ItemType.Melee, tex, src) {
-            Name = "crowbar";
-            Range = 125f;
-            Cooldown = 300;
+        public Axe(Texture2D tex, Rectangle src) : base(ItemType.Melee, tex, src) {
+            Name = "axe";
+            Range = 200f;
+            Cooldown = 700;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime)
@@ -24,13 +24,13 @@ namespace RoboFight
         {
             if (Owner.IsPlayer)
             {
-                if (EnemyManager.Instance.CheckAttack(Owner.Position, faceDir, 35f, Range, 2, gameHero)) Health -= 10f;
+                if (EnemyManager.Instance.CheckAttack(Owner.Position, faceDir, 50f, Range, 4, gameHero)) Health -= 15f;
             }
             else
             {
                 if ((Owner.Position - gameHero.Position).Length() < 100f)
                 {
-                    gameHero.DoHit(Position, 18f, faceDir, gameHero);
+                    gameHero.DoHit(Position, 25f, faceDir, gameHero);
                     Health -= 2f;
                 }
             }

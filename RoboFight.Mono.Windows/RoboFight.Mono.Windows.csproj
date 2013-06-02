@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{12D53C65-20C9-4A02-B506-A512F0E5D0FF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RoboFight.Mono.Windows</RootNamespace>
+    <AssemblyName>RoboFight.Mono.Windows</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WindowsGL\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\WindowsGL\Release\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\RoboFight\RoboFight\EnemyManager.cs">
+      <Link>EnemyManager.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Game.cs">
+      <Link>Game.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Helper.cs">
+      <Link>Helper.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\HUD.cs">
+      <Link>HUD.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\ItemManager.cs">
+      <Link>ItemManager.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Items\Axe.cs">
+      <Link>items\Axe.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Items\Crowbar.cs">
+      <Link>items\Crowbar.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Items\Item.cs">
+      <Link>items\Item.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Items\LaserPistol.cs">
+      <Link>items\LaserPistol.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\ParallaxManager.cs">
+      <Link>ParallaxManager.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\ParticleManager.cs">
+      <Link>ParticleManager.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\ProjectileManager.cs">
+      <Link>ProjectileManager.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Robot.cs">
+      <Link>Robot.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Animation.cs">
+      <Link>spine\Animation.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Atlas.cs">
+      <Link>spine\Atlas.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Attachments\AtlasAttachmentLoader.cs">
+      <Link>spine\attachments\AtlasAttachmentLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Attachments\Attachment.cs">
+      <Link>spine\attachments\Attachment.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Attachments\AttachmentLoader.cs">
+      <Link>spine\attachments\AttachmentLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Attachments\AttachmentType.cs">
+      <Link>spine\attachments\AttachmentType.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Attachments\RegionAttachment.cs">
+      <Link>spine\attachments\RegionAttachment.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\BaseAtlas.cs">
+      <Link>spine\BaseAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Bone.cs">
+      <Link>spine\Bone.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\BoneData.cs">
+      <Link>spine\BoneData.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Json.cs">
+      <Link>spine\Json.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Skeleton.cs">
+      <Link>spine\Skeleton.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\SkeletonData.cs">
+      <Link>spine\SkeletonData.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\SkeletonJson.cs">
+      <Link>spine\SkeletonJson.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\SkeletonRenderer.cs">
+      <Link>spine\SkeletonRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Skin.cs">
+      <Link>spine\Skin.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\Slot.cs">
+      <Link>spine\Slot.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\SlotData.cs">
+      <Link>spine\SlotData.cs</Link>
+    </Compile>
+    <Compile Include="..\RoboFight\RoboFight\Spine\SpriteBatcher.cs">
+      <Link>spine\SpriteBatcher.cs</Link>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\MonoGame\MonoGame.Framework\bin\Windows\Debug\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\robo\robo.png">
+      <Link>Content\robo\robo.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RoboFight\TiledLib.Mono.Windows\TiledLib.Mono.Windows.csproj">
+      <Project>{14ae59fb-38b9-4423-a3ff-3521ed686a33}</Project>
+      <Name>TiledLib.Mono.Windows</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\bg\bg0.xnb">
+      <Link>Content\bg\bg0.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\bg\bg1.xnb">
+      <Link>Content\bg\bg1.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\blank.xnb">
+      <Link>Content\blank.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\particles.xnb">
+      <Link>Content\particles.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\projectiles.xnb">
+      <Link>Content\projectiles.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\robo\robo.atlas">
+      <Link>Content\robo\robo.atlas</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\robo\Robo.json">
+      <Link>Content\robo\Robo.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\robo\robo.xnb">
+      <Link>Content\robo\robo.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sky.xnb">
+      <Link>Content\sky.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\testmap.xnb">
+      <Link>Content\testmap.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\tiles-glow.xnb">
+      <Link>Content\tiles-glow.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\tiles.xnb">
+      <Link>Content\tiles.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\title.xnb">
+      <Link>Content\title.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\font.xnb">
+      <Link>Content\font.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

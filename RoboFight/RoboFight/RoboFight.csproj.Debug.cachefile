@@ -5,6 +5,11 @@ Content\sky.xnb
 Content\projectiles.xnb
 Content\tiles.xnb
 Content\tiles-glow.xnb
+Content\particles.xnb
+Content\bg\bg0.xnb
+Content\bg\bg1.xnb
+Content\title.xnb
+Content\font.xnb
 Content\robo\robo.atlas
 Content\robo\Robo.json
 Content\robo\robo.png

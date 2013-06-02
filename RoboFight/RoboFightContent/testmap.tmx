@@ -6,6 +6,16 @@
  <tileset firstgid="401" name="tiles-glow" tilewidth="60" tileheight="60">
   <image source="tiles-glow.png" width="1200" height="1200"/>
  </tileset>
+ <layer name="Parallax1" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2YSw7AIAgFvf+dvFu3prENRZ6inUlcicjj48JSAAAAAAAAAPJTm7UrtbNm3qfy+ycdI7Eoc+bx640n4yzuoiNLzkZ1e88re3/2eW/PjeyP+o/AojuiJip67/7TfRH1yDDzJ+jIFIM3DmWvWe642yje8Egd1lgUfRE1Myt1RPjMMnPe/dZuFVYNVptVWiJ0ZOEt1gy5jkalY/f8nFLnE3R4/mQAAL5wAVpvPpEQJwAA
+  </data>
+ </layer>
+ <layer name="Parallax0" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3WSQ6AIBAFUe5/J+5mWJi4ELQZmt+kXuJSpTACKQEAAABQlncPYFB+XJFF78gvV0TRx1+c8B1ulo4Tmq3/kWLvW8PfFiV06OnZZxQ7Cut6pdphobhe9Rhp+JoDj/mZtVfW7l/9nWfv9bVnrTxTeD038tk80lhbos17y4ktu3pmv9u7ZeXa4tXSez5WQwcAAPtdekDI2BAnAAA=
+  </data>
+ </layer>
  <layer name="Tile3" width="50" height="50">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+2TPQrCQBBG16MIlppK+9hpr1Z6ACs9lbmD4hlsPJCzJIEhZiY/GIjwHrzCJOzONzOGAAAAAAAAAAAAAAAAMA6mk9x/Z2w5+tbSJcfQefv0dC4uxMxwKa6Me4bIo8/ucn4qrsWX4UbcOnd2rc3iFtr1Up+hZ7AT9+LT8CiexKRFjro6df1WlpjhLj4MdS/1GWnIZxC/mcmzs5PjWtwRv9P7VVdT3e+mZ7Gn7+DvQ9nL6pzKGXj75O2X1dc+OS7h+z+hjRnKXlbnFHvbtE/Wflk7nBT1WO8tDw05rAw6i7dP1n5552XO+3+z7Z6O3bbzRUTE3/gBzLwwExAnAAA=
@@ -25,7 +35,7 @@
  </objectgroup>
  <objectgroup name="Walkable3" width="50" height="50">
   <object x="0" y="2400">
-   <polygon points="0,0 720,1 779,59 1200,59 1379,-117 1621,-117 1799,60 2400,60 2520,-59 2877,-59 2940,1 2999,1 2999,180 0,180"/>
+   <polygon points="-6,0 720,1 779,59 1200,59 1379,-117 1621,-117 1799,60 2400,60 2520,-59 2877,-59 2940,1 3006,0 3005,180 -8,180"/>
   </object>
   <object x="721" y="2281">
    <polygon points="0,0 59,0 180,-120 659,-121 476,59 60,59"/>
@@ -52,7 +62,7 @@
  </objectgroup>
  <objectgroup name="Walkable2" width="50" height="50">
   <object x="0" y="2400">
-   <polygon points="0,0 239,0 420,-179 1139,-179 1200,-239 1560,-239 1741,-420 2220,-419 2640,1 2999,1 2999,181 2463,181 2161,-120 1741,-119 1557,60 1140,60 899,300 421,300 300,180 0,179"/>
+   <polygon points="0,0 239,0 420,-179 1139,-179 1200,-239 1560,-239 1741,-420 2220,-419 2640,1 3009,1 3009,182 2463,181 2161,-120 1741,-119 1557,60 1140,60 899,300 421,300 300,180 0,179"/>
   </object>
  </objectgroup>
  <layer name="Tile1" width="50" height="50">
@@ -107,7 +117,7 @@
   <object x="2466" y="2142" width="68" height="398"/>
  </objectgroup>
  <objectgroup name="Walkable0" width="50" height="50">
-  <object x="0" y="2400">
+  <object x="-1" y="2401">
    <polygon points="0,0 0,178 538,178 356,0"/>
   </object>
   <object x="420" y="2282">

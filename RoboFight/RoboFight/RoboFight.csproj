@@ -72,12 +72,16 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HUD.cs" />
     <Compile Include="ItemManager.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="Items\Axe.cs" />
     <Compile Include="Items\LaserPistol.cs" />
     <Compile Include="Items\Crowbar.cs" />
     <Compile Include="Items\Item.cs" />
+    <Compile Include="ParallaxManager.cs" />
+    <Compile Include="ParticleManager.cs" />
     <Compile Include="ProjectileManager.cs" />
     <Compile Include="Robot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

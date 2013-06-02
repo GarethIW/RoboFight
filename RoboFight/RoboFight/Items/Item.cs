@@ -42,6 +42,7 @@ namespace RoboFight
             itemTexture = tex;
             itemSource = src;
             Type = type;
+            Health = 121f;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -85,7 +86,7 @@ namespace RoboFight
 
         public virtual void Draw(SpriteBatch sb, Camera gameCamera)
         {
-            sb.Draw(itemTexture, Position, itemSource, Color.White * alpha, 0f, new Vector2(itemSource.Width, itemSource.Height)/2,1f, SpriteEffects.None, 1);
+            sb.Draw(itemTexture, Position, itemSource, Color.White * alpha, 0f, new Vector2(itemSource.Width/2, itemSource.Height),1f, SpriteEffects.None, 1);
         }
 
         public virtual void Use(int faceDir, float attackCharge, Robot gameHero)
