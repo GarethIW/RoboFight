@@ -35,6 +35,9 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\RoboFight\RoboFight\AudioController.cs">
+      <Link>AudioController.cs</Link>
+    </Compile>
     <Compile Include="..\RoboFight\RoboFight\EnemyManager.cs">
       <Link>EnemyManager.cs</Link>
     </Compile>

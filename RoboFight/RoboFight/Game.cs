@@ -92,6 +92,8 @@ namespace RoboFight
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            AudioController.LoadContent(Content);
+
             gameMap = Content.Load<Map>("testmap");
 
             enemyManager.LoadContent(Content, GraphicsDevice);

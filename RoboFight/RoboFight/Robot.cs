@@ -501,7 +501,7 @@ namespace RoboFight
                 pushingUp = false;
             }
 
-            if (Health <= 1f)
+            if (Health <= 1f ||!Active)
             {
                 Active = false;
 

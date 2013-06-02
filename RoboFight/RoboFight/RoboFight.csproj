@@ -72,6 +72,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioController.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="ItemManager.cs" />
     <Compile Include="EnemyManager.cs" />
