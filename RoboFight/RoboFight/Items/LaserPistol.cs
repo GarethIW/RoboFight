@@ -29,6 +29,7 @@ namespace RoboFight
                 ProjectileManager.Instance.Add(Owner.Position + new Vector2(Owner.faceDir * 60, -107), Owner.landingHeight - 1f, new Vector2(Owner.faceDir * 10f, 0f), 2000, true, ProjectileType.Laser, 15f, Color.Red);
 
                 Health -= 7f;
+                AudioController.PlaySFX("laser", 0.5f, 0f,0f);
             }
             else
             {
@@ -37,8 +38,13 @@ namespace RoboFight
                     ProjectileManager.Instance.Add(Owner.Position + new Vector2(Owner.faceDir * 60, -107), Owner.landingHeight - 1f, new Vector2(Owner.faceDir * 10f, 0f), 2000, false, ProjectileType.Laser, 10f, Color.Red);
 
                     Health -= 1f;
+                    AudioController.PlaySFX("laser", 0.5f, 0f, 0f);
+
                 }
             }
+
+            
+
             base.Use(faceDir, attackCharge, gameHero);
         }
 

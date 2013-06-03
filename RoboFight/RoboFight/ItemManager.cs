@@ -100,6 +100,8 @@ namespace RoboFight
                 dropItem.InWorld = true;
                 dropItem.Position = robot.Position + new Vector2(0, 0);
                 dropItem.DroppedPosition = robot.Position;
+                AudioController.PlaySFX("pickup", 1f, 0f, 0f);
+
             }
             else
             {
@@ -114,6 +116,8 @@ namespace RoboFight
                                 i.InWorld = false;
                                 robot.Item = i;
                                 i.Owner = robot;
+                                AudioController.PlaySFX("pickup", 1f, 0f, 0f);
+
                                 break;
                             }
                         }

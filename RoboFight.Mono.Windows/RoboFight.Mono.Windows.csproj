@@ -8,8 +8,8 @@
     <ProjectGuid>{12D53C65-20C9-4A02-B506-A512F0E5D0FF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RoboFight.Mono.Windows</RootNamespace>
-    <AssemblyName>RoboFight.Mono.Windows</AssemblyName>
+    <RootNamespace>RoboFight</RootNamespace>
+    <AssemblyName>RoboFight</AssemblyName>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\RoboFight\RoboFight\AudioController.cs">
@@ -150,6 +150,7 @@
       <Link>Content\robo\robo.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Game.ico" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +216,66 @@
   <ItemGroup>
     <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\font.xnb">
       <Link>Content\font.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\fist.xnb">
+      <Link>Content\sfx\fist.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\hit1.xnb">
+      <Link>Content\sfx\hit1.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\hit2.xnb">
+      <Link>Content\sfx\hit2.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\hit3.xnb">
+      <Link>Content\sfx\hit3.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\laser.xnb">
+      <Link>Content\sfx\laser.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\powerdown.xnb">
+      <Link>Content\sfx\powerdown.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\swipe.xnb">
+      <Link>Content\sfx\swipe.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\jump.xnb">
+      <Link>Content\sfx\jump.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\health.xnb">
+      <Link>Content\sfx\health.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\land.xnb">
+      <Link>Content\sfx\land.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\pickup.xnb">
+      <Link>Content\sfx\pickup.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\sfx\thud.xnb">
+      <Link>Content\sfx\thud.xnb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\RoboFight\RoboFight\bin\x86\Debug\Content\music.xnb">
+      <Link>Content\music.xnb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

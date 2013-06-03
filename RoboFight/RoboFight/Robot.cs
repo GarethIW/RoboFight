@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Spine;
@@ -82,6 +83,8 @@ namespace RoboFight
         double notMovedTime = 0;
         bool AIchargingAttack = false;
 
+        public SoundEffectInstance fistSound;
+
         public Robot(Vector2 spawnpos, bool isPlayer)
         {
             IsPlayer = isPlayer;
@@ -127,6 +130,12 @@ namespace RoboFight
             knockbackTime = 0;
             landingHeight = spawnPosition.Y;
             Sector = 0;
+
+            fistSound = AudioController.effects["fist"].CreateInstance();
+            fistSound.IsLooped = true;
+            fistSound.Volume = 0f;
+            fistSound.Pitch = -1f;
+            fistSound.Play();
         }
 
         public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
@@ -143,7 +152,12 @@ namespace RoboFight
             
             //skeleton.FindSlot("melee-item").Attachment = itemAttach;
             //skeleton.SetAttachment("melee-item", "crowbar");
-            
+
+            fistSound = AudioController.effects["fist"].CreateInstance();
+            fistSound.IsLooped = true;
+            fistSound.Volume = 0f;
+            fistSound.Pitch = -1f;
+            fistSound.Play();
 
             Animations.Add("walk", skeleton.Data.FindAnimation("walk"));
             Animations.Add("punch-hold", skeleton.Data.FindAnimation("punch-hold"));
@@ -208,6 +222,12 @@ namespace RoboFight
             skeleton.UpdateWorldTransform();
 
             skeleton.FindSlot("fist-item").A = 0f;
+
+            fistSound = AudioController.effects["fist"].CreateInstance();
+            fistSound.IsLooped = true;
+            fistSound.Volume = 0f;
+            fistSound.Pitch = -1f;
+            fistSound.Play();
         }
 
         public void Update(GameTime gameTime, Camera gameCamera, Map gameMap, List<int> levelSectors, Dictionary<int, MapObjectLayer> walkableLayers, Robot gameHero)
@@ -372,6 +392,9 @@ namespace RoboFight
                     if (Speed.X > 0) Speed.X -= 0.1f;
                     else if (Speed.X < 0) Speed.X += 0.1f;
 
+                    if (fistSound.Volume > 0f) fistSound.Volume = MathHelper.Clamp(fistSound.Volume -= 0.1f,0f,1f);
+                    if (fistSound.Pitch > -1f) fistSound.Pitch = MathHelper.Clamp(fistSound.Pitch - 0.1f,-0.9f,0.9f);
+
                     //if (Speed.X > -0.1f && Speed.X < 0.1f) knockbackTime = 0;
                 }
                 else
@@ -397,11 +420,16 @@ namespace RoboFight
                         {
                             attackCharge += 0.25f * (IsPlayer?2f:1f);
                             Animations["punch-hold"].Apply(skeleton, 1f, false);
+
+                            fistSound.Volume = MathHelper.Clamp((0.2f / 50f) * (attackCharge), 0f,1f);
+                            fistSound.Pitch = MathHelper.Clamp(-1f + ((2f / 50f) * (attackCharge)), -0.9f,0.9f);
                         }
                         else if (Item.Type == ItemType.Melee)
                         {
                             attackCharge += 0.25f;
                             Animations["punch-hold"].Apply(skeleton, 1f, false);
+
+
                         }
                         else if (Item.Type == ItemType.Projectile)
                         {
@@ -413,6 +441,7 @@ namespace RoboFight
 
                         if(rand.Next(51 - (int)attackCharge)==0 && Item==null)
                             ParticleManager.Instance.Add(ParticleType.Standard, (Position - new Vector2(faceDir * 50, 75)) + (new Vector2(-15f + ((float)rand.NextDouble() * 30f), -10f + ((float)rand.NextDouble() * 20f))), (landingHeight - 10f) + ((float)rand.NextDouble() * 20f), new Vector2(-0.5f + (float)rand.NextDouble() * 1f, -0.5f + (float)rand.NextDouble() * 1f), 0f, true, new Rectangle(0, 0, 2, 2), 0f, Color.DeepSkyBlue);
+
                         
                     }
                     else if (punchReleased)
@@ -423,6 +452,7 @@ namespace RoboFight
                         {
                             if (punchReleaseTime == 0)
                             {
+                                AudioController.PlaySFX("swipe",0.5f, -0.25f + ((float)rand.NextDouble() * 0.5f),0f);
                                 if (IsPlayer)
                                     EnemyManager.Instance.CheckAttack(Position, faceDir, attackCharge, attackRange, 1, gameHero);
                                 else
@@ -433,6 +463,7 @@ namespace RoboFight
                         {
                             if (punchReleaseTime == 0)
                             {
+                                AudioController.PlaySFX("swipe",0.5f,-0.25f + ((float)rand.NextDouble() * 0.5f), 0f);
                                 Item.Use(faceDir, attackCharge, gameHero);
                                 
                             }
@@ -453,6 +484,10 @@ namespace RoboFight
 
                         Animations["punch-release"].Apply(skeleton, 1f, false);
 
+
+                        if (fistSound.Volume > 0f) fistSound.Volume = MathHelper.Clamp(fistSound.Volume -= 0.1f, 0f, 1f);
+                        if (fistSound.Pitch > -1f) fistSound.Pitch = MathHelper.Clamp(fistSound.Pitch - 0.1f, -0.9f, 0.9f);
+
                         attackCharge = 0f;
                     }
 
@@ -472,6 +507,9 @@ namespace RoboFight
 
                 if (Item != null)
                 {
+                    if (fistSound.Volume > 0f) fistSound.Volume = MathHelper.Clamp(fistSound.Volume -= 0.1f, 0f, 1f);
+                    if (fistSound.Pitch > -1f) fistSound.Pitch = MathHelper.Clamp(fistSound.Pitch - 0.1f, -0.9f, 0.9f);
+
                     if (Item.Type == ItemType.Melee)
                     {
                         skeleton.SetAttachment("melee-item", Item.Name);
@@ -525,7 +563,13 @@ namespace RoboFight
                 if (deadTime >= 3000)
                 {
                     Dead = true;
+
+                    fistSound.Stop();
+                    fistSound.Dispose();
                 }
+
+                if (fistSound.Volume > 0f) fistSound.Volume = MathHelper.Clamp(fistSound.Volume -= 0.1f, 0f, 1f);
+                if (fistSound.Pitch > -1f) fistSound.Pitch = MathHelper.Clamp(fistSound.Pitch -= 0.1f, -0.9f, 0.9f);
             }
 
             if (falling)
@@ -538,6 +582,8 @@ namespace RoboFight
                     falling = false;
                     JumpSpeed = Vector2.Zero;
                     Position.Y = landingHeight;
+                    AudioController.PlaySFX("land", 1f, 0f, 0f);
+
                 }
             }
 
@@ -573,6 +619,8 @@ namespace RoboFight
                 Sector--;
 
             Health = MathHelper.Clamp(Health, 0f, 121f);
+
+            if (fistSound.Volume < 0.01f) fistSound.Volume = 0f;
         }
 
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Camera gameCamera)
@@ -638,6 +686,7 @@ namespace RoboFight
 
             if (!jumping && !falling)
             {
+                AudioController.PlaySFX("jump", 0.5f, 0f, 0f);
                
                 jumping = true;
                 animTime = 0;
@@ -916,6 +965,9 @@ namespace RoboFight
                 Health -= power;
             }
 
+            AudioController.PlaySFX("hit" + (1 + rand.Next(3)).ToString(), 1f, -0.25f + ((float)rand.NextDouble() * 0.5f), 0f);
+            AudioController.PlaySFX("thud", 0.8f,0f,0f);
+
             ParticleManager.Instance.AddHurt(Position + new Vector2(0,-75f), new Vector2((power/5f) * face,0f), landingHeight, tint);
 
             AIchargingAttack = false;
@@ -923,6 +975,8 @@ namespace RoboFight
 
             if (Health <= 0)
             {
+                AudioController.PlaySFX("powerdown", 0.5f, 0f, 0f);
+
                 if (Item != null)
                 {
                     Item.InWorld = true;

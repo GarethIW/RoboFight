@@ -16,7 +16,7 @@ namespace RoboFight
     public static class AudioController
     {
         public static float sfxvolume = 1f;
-        public static float musicvolume = 0.5f;
+        public static float musicvolume = 0.1f;
 
         public static Random randomNumber = new Random();
 
@@ -35,21 +35,25 @@ namespace RoboFight
         {
             effects = new Dictionary<string, SoundEffect>();
 
-            //effects.Add("teleport_in", content.Load<SoundEffect>("sfx/teleport_in"));
-            //effects.Add("teleport_out", content.Load<SoundEffect>("sfx/teleport_out"));
-            //effects.Add("fstep-grass", content.Load<SoundEffect>("sfx/fstep-grass"));
-            //effects.Add("fstep-metal", content.Load<SoundEffect>("sfx/fstep-metal"));
-            //effects.Add("fstep-wood", content.Load<SoundEffect>("sfx/fstep-wood"));
-            //effects.Add("valve", content.Load<SoundEffect>("sfx/valve"));
-            //effects.Add("water", content.Load<SoundEffect>("sfx/water"));
-            //effects.Add("splash", content.Load<SoundEffect>("sfx/splash"));
-            
+            effects.Add("fist", content.Load<SoundEffect>("sfx/fist"));
+            effects.Add("hit1", content.Load<SoundEffect>("sfx/hit1"));
+            effects.Add("hit2", content.Load<SoundEffect>("sfx/hit2"));
+            effects.Add("hit3", content.Load<SoundEffect>("sfx/hit3"));
+            effects.Add("laser", content.Load<SoundEffect>("sfx/laser"));
+            effects.Add("powerdown", content.Load<SoundEffect>("sfx/powerdown"));
+            effects.Add("swipe", content.Load<SoundEffect>("sfx/swipe"));
+            effects.Add("jump", content.Load<SoundEffect>("sfx/jump"));
+            effects.Add("health", content.Load<SoundEffect>("sfx/health"));
+            effects.Add("land", content.Load<SoundEffect>("sfx/land"));
+            effects.Add("pickup", content.Load<SoundEffect>("sfx/pickup"));
+            effects.Add("thud", content.Load<SoundEffect>("sfx/thud"));
+
 
 
 
 
             songs = new Dictionary<string, SoundEffectInstance>();
-            //songs.Add("0", content.Load<SoundEffect>("music/1").CreateInstance());
+            songs.Add("theme", content.Load<SoundEffect>("music").CreateInstance());
             //songs.Add("1", content.Load<SoundEffect>("music/2").CreateInstance());
             //songs.Add("2", content.Load<SoundEffect>("music/3").CreateInstance());
             //songs.Add("3", content.Load<SoundEffect>("music/4").CreateInstance());
@@ -89,7 +93,7 @@ namespace RoboFight
             playingTrack = track;
             isPlaying = true;
             songs[track].IsLooped = true;
-            songs[track].Volume = 0f;
+            songs[track].Volume = musicvolume;
             songs[track].Play();
         }
 
@@ -122,6 +126,7 @@ namespace RoboFight
         }
         public static void PlaySFX(string name, float volume, float pitch, float pan)
         {
+            pitch = MathHelper.Clamp(pitch, -1.00f, 1.00f);
             // if (OptionsMenuScreen.sfx)
             if (pan < -1f || pan > 1f) return;
             volume = MathHelper.Clamp(volume, 0f, 1f);

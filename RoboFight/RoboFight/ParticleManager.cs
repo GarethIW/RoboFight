@@ -104,8 +104,11 @@ namespace RoboFight
                                 p.Alpha = 0f;
                                 p.Active = false;
                                 gameHero.Health += 1f;
-                                if ((int)gameHero.Health == 121) gameHero.Score += 5;
+                                if ((int)gameHero.Health > 121) gameHero.Score += 5;
                                 gameHero.Health = MathHelper.Clamp(gameHero.Health, 0f, 121f);
+
+                                AudioController.PlaySFX("health",0.5f,-0.25f + ((float)Rand.NextDouble()*0.5f), 0f);
+
                             }
                         }
                         break;

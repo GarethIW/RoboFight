@@ -162,6 +162,7 @@ namespace RoboFight
                         {
                             titleScreenExiting = false;
                             showingTitleScreen = false;
+                            AudioController.PlayMusic("theme");
                         }
                     }
                     else
@@ -245,6 +246,8 @@ namespace RoboFight
                             prevScore = gameHero.Score;
                             if (gameHero.Score > highScore) highScore = gameHero.Score;
                             showingTitleScreen = true;
+                            foreach (Robot r in enemyManager.Enemies) r.fistSound.Stop();
+                            AudioController.StopMusic();
                         }
                    
                 }
@@ -263,7 +266,7 @@ namespace RoboFight
                
             }
 
-            
+            AudioController.Update(gameTime);
 
             base.Update(gameTime);
         }
